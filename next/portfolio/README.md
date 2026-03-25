@@ -21,7 +21,7 @@ Built with focus on **performance, simplicity and clean UI**.
 ## 🖼 Preview
 
 <p align="center">
-  <img src="./public/screenshots/preview.png" width="800"/>
+  <img src="/public/screenshots/preview.png" width="800"/>
 </p>
 
 <p align="center">
