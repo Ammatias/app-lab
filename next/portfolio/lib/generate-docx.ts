@@ -155,8 +155,20 @@ export async function generateDOCX() {
                   color: "525252",
                 }),
               ],
-              spacing: { after: 50 },
+              spacing: { after: edu.specialty ? 50 : 0 },
             }),
+            ...(edu.specialty ? [
+              new Paragraph({
+                children: [
+                  new TextRun({
+                    text: edu.specialty,
+                    size: 22,
+                    color: "525252",
+                  }),
+                ],
+                spacing: { after: 50 },
+              }),
+            ] : []),
             new Paragraph({
               children: [
                 new TextRun({
@@ -169,6 +181,58 @@ export async function generateDOCX() {
               spacing: { after: eduIndex < resume.education.length - 1 ? 200 : 0 },
             }),
           ]),
+
+          // Курсы повышения квалификации
+          ...(resume.courses && resume.courses.length > 0 ? [
+            new Paragraph({
+              text: "Повышение квалификации, курсы",
+              heading: HeadingLevel.HEADING_1,
+              spacing: { before: 200, after: 200 },
+              border: {
+                bottom: { color: "3730A3", space: 1, style: BorderStyle.SINGLE },
+              },
+            }),
+            ...resume.courses.flatMap((course, courseIndex) => [
+              new Paragraph({
+                text: course.title,
+                heading: HeadingLevel.HEADING_2,
+                spacing: { after: 100 },
+              }),
+              new Paragraph({
+                children: [
+                  new TextRun({
+                    text: course.institution,
+                    size: 22,
+                    color: "525252",
+                  }),
+                ],
+                spacing: { after: course.specialty ? 50 : 0 },
+              }),
+              ...(course.specialty ? [
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      text: course.specialty,
+                      size: 22,
+                      color: "525252",
+                    }),
+                  ],
+                  spacing: { after: 50 },
+                }),
+              ] : []),
+              new Paragraph({
+                children: [
+                  new TextRun({
+                    text: course.year,
+                    size: 20,
+                    color: "71717A",
+                    italics: true,
+                  }),
+                ],
+                spacing: { after: courseIndex < resume.courses.length - 1 ? 200 : 0 },
+              }),
+            ]),
+          ] : []),
 
           // Контакты
           new Paragraph({
@@ -234,5 +298,5 @@ export async function generateDOCX() {
   });
 
   const blob = await Packer.toBlob(doc);
-  saveAs(blob, "resume.docx");
+  saveAs(blob, "Резюме Корчагин Д. А..docx");
 }

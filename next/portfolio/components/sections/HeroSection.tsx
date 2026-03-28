@@ -2,8 +2,20 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { ParallaxText } from "@/components/ui/ParallaxText";
 
-export function HeroSection() {
+interface HeroData {
+  title: string;
+  subtitle: string;
+  ctaPrimary: { text: string; href: string };
+  ctaSecondary: { text: string; href: string };
+}
+
+interface HeroSectionProps {
+  hero: HeroData;
+}
+
+export function HeroSection({ hero }: HeroSectionProps) {
   return (
     <section className="min-h-screen flex items-center justify-center px-4 pt-16">
       <div className="container mx-auto text-center">
@@ -12,25 +24,28 @@ export function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">
-            Привет, я Разработчик
-          </h1>
-          <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Full-stack разработчик, создающий современные веб-приложения с 
-            фокусом на производительность и пользовательский опыт
-          </p>
+          <ParallaxText speed={0.3}>
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">
+              {hero.title}
+            </h1>
+          </ParallaxText>
+          <ParallaxText speed={0.2}>
+            <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+              {hero.subtitle}
+            </p>
+          </ParallaxText>
           <div className="flex gap-4 justify-center">
             <Link
-              href="#projects"
+              href={hero.ctaPrimary.href}
               className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-opacity"
             >
-              Посмотреть проекты
+              {hero.ctaPrimary.text}
             </Link>
             <Link
-              href="/resume"
+              href={hero.ctaSecondary.href}
               className="px-6 py-3 border border-border rounded-lg hover:bg-accent transition-colors"
             >
-              Резюме
+              {hero.ctaSecondary.text}
             </Link>
           </div>
         </motion.div>

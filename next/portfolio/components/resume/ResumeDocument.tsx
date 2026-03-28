@@ -135,13 +135,33 @@ export function ResumeDocument() {
         <View style={styles.section}>
           <Text style={styles.subheading}>Образование</Text>
           {resume.education.map((edu) => (
-            <View key={edu.id}>
+            <View key={edu.id} style={{ marginBottom: 8 }}>
               <Text style={styles.text}>{edu.degree}</Text>
               <Text style={styles.text}>{edu.institution}</Text>
+              {edu.specialty && (
+                <Text style={styles.text}>{edu.specialty}</Text>
+              )}
               <Text style={styles.text}>{edu.year}</Text>
             </View>
           ))}
         </View>
+
+        {/* Курсы повышения квалификации */}
+        {resume.courses && resume.courses.length > 0 && (
+          <View style={styles.section}>
+            <Text style={styles.subheading}>Повышение квалификации, курсы</Text>
+            {resume.courses.map((course) => (
+              <View key={course.id} style={{ marginBottom: 8 }}>
+                <Text style={styles.text}>{course.title}</Text>
+                <Text style={styles.text}>{course.institution}</Text>
+                {course.specialty && (
+                  <Text style={styles.text}>{course.specialty}</Text>
+                )}
+                <Text style={styles.text}>{course.year}</Text>
+              </View>
+            ))}
+          </View>
+        )}
 
         {/* Контакты */}
         <View style={styles.section}>

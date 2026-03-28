@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 export function Header() {
   return (
@@ -13,22 +14,25 @@ export function Header() {
     >
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         <Link href="/" className="text-xl font-bold text-foreground">
-          Portfolio
+          Портфолио
         </Link>
-        <nav className="flex gap-6">
-          <Link
-            href="/"
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-          >
-            Главная
-          </Link>
-          <Link
-            href="/resume"
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-          >
-            Резюме
-          </Link>
-        </nav>
+        <div className="flex items-center gap-6">
+          <nav className="flex gap-6">
+            <Link
+              href="/"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Главная
+            </Link>
+            <Link
+              href="/resume"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Резюме
+            </Link>
+          </nav>
+          <ThemeToggle />
+        </div>
       </div>
     </motion.header>
   );

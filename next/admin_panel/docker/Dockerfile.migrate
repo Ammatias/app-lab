@@ -1,0 +1,16 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Install dependencies (Prisma 5.x)
+COPY package.json package-lock.json* ./
+RUN npm ci
+
+# Copy prisma schema
+COPY prisma ./prisma
+
+# Generate Prisma Client (Prisma 5.x)
+RUN npx prisma generate
+
+# Run migrations
+CMD ["npx", "prisma", "migrate", "deploy"]

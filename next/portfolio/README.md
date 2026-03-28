@@ -2,13 +2,13 @@
 
 Personal portfolio website built with Next.js.
 
-> A modern, minimal and fast website to showcase my projects, skills and experience.
+> A modern, minimal and fast website to showcase projects, skills and experience.
 
 ---
 
 ## 🚀 Overview
 
-This is my main portfolio website where I present:
+This is a portfolio website that displays:
 
 * 💼 Projects
 * 🧠 Technical skills
@@ -16,96 +16,180 @@ This is my main portfolio website where I present:
 
 Built with focus on **performance, simplicity and clean UI**.
 
----
-
-## 🖼 Preview
-
-<p align="center">
-  <img src="./public/screenshots/portfolio.png" width="800"/>
-</p>
-
-<p align="center">
-  Minimal and clean portfolio UI
-</p>
-
----
-
-## 🖼 Features
-
-* Clean and minimal design
-* Responsive layout
-* Project showcase
-* Resume section
-* Smooth navigation
+**Key Features:**
+- 3D background with Three.js (10 floating lines)
+- Dark/Light theme switching
+- Parallax effects for headings
+- Fade + Slide animations on scroll
+- Resume download in PDF and DOCX formats
+- Fully responsive design
+- Integration with Admin Panel for dynamic content
 
 ---
 
 ## 🛠 Tech Stack
 
-* Next.js
-* React
-* TypeScript
-* Tailwind CSS
+* **Framework:** Next.js 16
+* **Language:** TypeScript
+* **Styling:** Tailwind CSS 4
+* **Animations:** Framer Motion
+* **3D Graphics:** Three.js, @react-three/fiber, @react-three/drei
+* **PDF Generation:** @react-pdf/renderer, docx
+* **UI Icons:** Lucide React
 
 ---
 
 ## ▶️ Run locally
 
-```bash id="nrt3qf"
+```bash
+# Install dependencies
 npm install
+
+# Run development server
 npm run dev
 ```
+
+Open [http://localhost:3000](http://localhost:3000) to see the result.
 
 ---
 
 ## 🌍 Deployment
 
-Can be deployed using:
+### Docker (recommended)
 
-* Vercel
-* Docker (recommended for self-hosting)
+```bash
+cd docker
+chmod +x deploy.sh
+./deploy.sh
+```
+
+### Vercel
+
+Deploy using the Vercel platform for automatic deployments from Git.
 
 ---
 
-## 🔗 Integration
+## 🔗 Integration with Admin Panel
 
-This project is part of my self-hosted ecosystem:
+This portfolio integrates with the Admin Panel for dynamic content management.
 
-* Reverse proxy via Traefik
-* Can run inside my homelab
-* Designed for containerized deployment
+### Data Sources
+
+**1. Static data (default)**
+```bash
+DATA_SOURCE="static"
+```
+Uses local data from `/data/*.ts` files.
+
+**2. API from Admin Panel**
+```bash
+DATA_SOURCE="api"
+NEXT_PUBLIC_ADMIN_API_URL="http://admin-panel:3000"
+```
+Fetches content dynamically from the Admin Panel API.
+
+### API Endpoints
+
+| Endpoint | Description |
+|----------|-------------|
+| `GET /api/public/portfolio/content` | Get all content (projects, resume, hero) |
+| `GET /api/resume/portfolio` | Get resume data |
+| `GET /api/hero/portfolio` | Get Hero section data |
+| `GET /api/projects/portfolio` | Get projects list |
 
 ---
 
 ## 📁 Project Structure
 
-```bash id="c64a0w"
-app/
-components/
-data/
-lib/
-public/
-utils/
+```
+portfolio/
+├── app/
+│   ├── api/
+│   │   └── revalidate/          # Webhook for cache revalidation
+│   ├── resume/
+│   │   ├── page.tsx             # Resume page
+│   │   └── ResumeClient.tsx     # Resume client component
+│   ├── page.tsx                 # Home page
+│   └── layout.tsx               # Root layout
+├── components/
+│   ├── resume/                  # Resume components
+│   ├── sections/                # Page sections (Hero, Projects, etc.)
+│   └── ui/                      # UI components
+├── data/
+│   ├── hero.ts                  # Hero section data
+│   ├── resume.ts                # Resume data
+│   ├── projects.ts              # Projects data
+│   └── theme.ts                 # Theme configuration
+├── lib/
+│   └── api-client.ts            # API client for Admin Panel
+├── docker/
+│   ├── Dockerfile
+│   ├── docker-compose.yml
+│   ├── .env.example
+│   ├── deploy.sh
+│   └── README.md
+└── package.json
 ```
 
 ---
 
-## 📌 Notes
+## 📦 Docker Commands
 
-* Built as a simple and fast portfolio
-* Designed for future expansion
-* Integrated into my infrastructure setup
+```bash
+# Build
+npm run docker:build
+
+# Start
+npm run docker:up
+
+# Stop
+npm run docker:down
+
+# View logs
+npm run docker:logs
+```
 
 ---
 
-## 🔗 Related Projects
+## 🔐 Environment Variables
 
-* 🏠 Homelab → infrastructure & services
-* 🧪 App Lab → applications & experiments
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `NEXT_PUBLIC_ADMIN_API_URL` | Admin Panel API URL | `http://admin-panel:3000` |
+| `DATA_SOURCE` | Data source mode | `api` or `static` |
 
 ---
 
-## 🎯 Goal
+## 📄 Documentation
 
-Create a **clean and professional personal website**
-that reflects both development and infrastructure skills.
+- `docker/README.md` — Docker quick start
+- `docker/DEPLOY.md` — Full deployment guide
+
+---
+
+## 🎯 Features
+
+### Resume Download
+
+The portfolio supports downloading resume in two formats:
+- **PDF** — Generated using @react-pdf/renderer
+- **DOCX** — Generated using docx library
+
+### Theme System
+
+Built-in dark/light theme with:
+- Smooth transitions
+- Persistent preference storage
+- System preference detection
+
+### 3D Background
+
+Animated Three.js background with:
+- 10 floating lines
+- Smooth mouse-follow effect
+- Performance optimized
+
+---
+
+**Version:** 2.0
+**Last Updated:** March 2026

@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { footer } from "@/data/footer";
 
 export function Footer() {
   return (
@@ -11,7 +12,7 @@ export function Footer() {
       className="border-t border-border py-6 mt-auto"
     >
       <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-        © {new Date().getFullYear()} Portfolio. All rights reserved.
+        © {new Date().getFullYear()} {footer.copyright}
       </div>
     </motion.footer>
   );

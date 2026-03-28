@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+/* Тёмная тема (по умолчанию) */
 :root {
   --background: #0a0a0a;
   --foreground: #ededed;
@@ -11,6 +12,20 @@
   --accent: #27272a;
   --card: #18181b;
   --card-foreground: #ededed;
+}
+
+/* Светлая тема */
+.light {
+  --background: #ffffff;
+  --foreground: #0a0a0a;
+  --primary: #8b5cf6;
+  --primary-foreground: #ffffff;
+  --muted: #a1a1aa;
+  --muted-foreground: #71717a;
+  --border: #e4e4e7;
+  --accent: #f4f4f5;
+  --card: #fafafa;
+  --card-foreground: #0a0a0a;
 }
 
 @theme inline {

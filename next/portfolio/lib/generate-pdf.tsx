@@ -6,5 +6,5 @@ import { ResumeDocument } from "@/components/resume/ResumeDocument";
 
 export async function generatePDF() {
   const blob = await pdf(<ResumeDocument />).toBlob();
-  saveAs(blob, "resume.pdf");
+  saveAs(blob, "Резюме Корчагин Д. А..pdf");
 }
