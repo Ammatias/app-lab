@@ -1,106 +1,47 @@
-# 🧪 App Lab
+# App Lab
 
-Collection of my **applications, experiments and prototypes**.
+Public source code for websites, applications, and software projects.
 
-> Building apps on top of my self-hosted infrastructure.
+The repository contains publishable project snapshots rather than private deployment state. Projects can use Next.js or other web, desktop, and application technologies as the collection grows.
 
----
+## Current projects
 
-## 🚀 Overview
-
-This repository contains:
-
-* 🌐 Web applications (Next.js)
-* 🖥 Desktop applications (WPF / .NET)
-* 🧪 Experiments and prototypes
-* 🔌 Apps integrated with my homelab
-
----
-
-## 🧩 Structure
-
-```bash
-apps/
-├── next/
-│   ├── project-name
-│   └── ...
-│
-├── dotnet/
-│   ├── project-name
-│   └── ...
+```text
+next/
+├── portfolio/    # public portfolio website
+└── admin_panel/  # content administration panel
 ```
 
----
+Both current applications use Next.js and TypeScript. The administration panel uses PostgreSQL and Prisma. Project-specific setup and validation instructions are in [`next/README.md`](next/README.md).
 
-## 🌐 Web Apps
+## Privacy boundary
 
-Built with:
+This is a public repository. It must not contain:
 
-* Next.js
-* API integrations
-* Self-hosted services
+- real names, résumés, contact details, private screenshots, or other personal data;
+- production domains, internal addresses, infrastructure notes, or database contents;
+- passwords, tokens, private keys, cookies, or populated `.env` files;
+- private deployment artifacts or operational documentation.
 
-Focus:
+Published examples use reserved domains, neutral demonstration content, and explicit placeholders. Private working sources must be sanitized before they are copied here.
 
-* simple tools
-* useful interfaces
-* integration with homelab
+## Validation
 
----
+For each Node.js application:
 
-## 🖥 Desktop Apps
+```bash
+npm ci
+npm run lint
+npm run build
+```
 
-Built with:
+Before publication, also inspect the complete diff and scan the repository history for personal data and credentials.
 
-* WPF (.NET)
+## Related repositories
 
-Focus:
+- [homelab](https://github.com/Ammatias/homelab) — portable infrastructure examples
+- [cheat-sheets](https://github.com/Ammatias/cheat-sheets) — administration notes and utilities
 
-* utilities
-* local tools
-* system integration
+## License and security
 
----
-
-## 🔗 Integration
-
-Some apps may integrate with:
-
-* 🐳 Docker services
-* 🤖 Local AI (LLMs, APIs)
-* 🔐 Auth systems
-
----
-
-## 🧠 Philosophy
-
-* Build real things
-* Keep it simple
-* Learn by doing
-
-> Not tutorials — actual working apps
-
----
-
-## 🚧 Status
-
-Active development:
-
-* adding new apps
-* experimenting with ideas
-* improving structure
-
----
-
-## 🔗 Related Repositories
-
-* 🏠 Homelab → infrastructure & services
-* 📚 Cheat Sheets → knowledge base
-
----
-
-## 📌 Notes
-
-* Projects may vary in complexity
-* Some are experimental
-* Code reflects learning process
+The repository is licensed under the [MIT License](LICENSE). Report vulnerabilities privately as described in [SECURITY.md](SECURITY.md).
