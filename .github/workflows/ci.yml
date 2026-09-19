@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate ${{ matrix.application }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        application:
+          - next/portfolio
+          - next/admin_panel
+    defaults:
+      run:
+        working-directory: ${{ matrix.application }}
+    env:
+      DATABASE_URL: postgresql://app_user:example-password@localhost:5432/app_db
+      AUTHENTIK_CLIENT_ID: example-client
+      AUTHENTIK_CLIENT_SECRET: ${{ github.sha }}
+      AUTHENTIK_ISSUER: https://auth.example.com/application/o/app/
+      NEXTAUTH_URL: https://admin.example.com
+      NEXTAUTH_SECRET: ${{ github.sha }}
+      NEXT_PUBLIC_ADMIN_API_URL: https://admin.example.com
+      NEXT_PUBLIC_PORTFOLIO_URL: https://portfolio.example.com
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: ${{ matrix.application }}/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
