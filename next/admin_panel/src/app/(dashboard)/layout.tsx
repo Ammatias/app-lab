@@ -1,18 +1,24 @@
-import { Sidebar } from '@/components/layout/sidebar'
-import { Header } from '@/components/layout/header'
+import { AppShell } from '@/components/layout/app-shell'
+import { db } from '@/lib/db'
 
-export default function DashboardLayout({
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
+export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  return (
-    <div className="flex h-screen">
-      <Sidebar />
-      <div className="flex flex-1 flex-col">
-        <Header />
-        <main className="flex-1 overflow-y-auto p-6">{children}</main>
-      </div>
-    </div>
-  )
+  let sites: Array<{ id: string; name: string; slug: string; status: string }> = []
+
+  try {
+    sites = await db.project.findMany({
+      orderBy: { name: 'asc' },
+      select: { id: true, name: true, slug: true, status: true },
+    })
+  } catch (error) {
+    console.error('Failed to load sites for navigation:', error)
+  }
+
+  return <AppShell sites={sites}>{children}</AppShell>
 }

@@ -22,6 +22,7 @@ export async function POST(request: NextRequest) {
         slug: true,
         url: true,
         status: true,
+        siteType: true,
         content: true,
         settings: true,
         userId: true,
@@ -61,6 +62,7 @@ async function main() {
       name: ${JSON.stringify(project.name)},
       url: ${JSON.stringify(project.url)},
       userId: ${JSON.stringify(project.userId || 'system')},
+      siteType: ${JSON.stringify(project.siteType)},
       content: content,
       settings: ${JSON.stringify(project.settings || { theme: 'dark', colors: {} })}
     },
@@ -70,6 +72,7 @@ async function main() {
       slug: 'portfolio',
       url: ${JSON.stringify(project.url)},
       userId: ${JSON.stringify(project.userId || 'system')},
+      siteType: ${JSON.stringify(project.siteType)},
       content: content,
       settings: ${JSON.stringify(project.settings || { theme: 'dark', colors: {} })}
     }

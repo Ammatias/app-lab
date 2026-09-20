@@ -1,42 +1,41 @@
 import { db } from '@/lib/db'
 import { BuildsTable } from '@/components/tables/builds-table'
-import { Button } from '@/components/ui/button'
-import { Play } from 'lucide-react'
+import { PageHeader } from '@/components/ui/page-header'
 
-// Отключаем кэширование для динамических данных
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
 export default async function BuildsPage() {
-  let builds: any[] = []
+  let loadError = false
+  let builds: Array<{
+    id: string
+    status: string
+    logs: string | null
+    triggeredBy: string | null
+    startedAt: Date
+    endedAt: Date | null
+    project: { name: string; slug: string }
+  }> = []
 
   try {
     builds = await db.build.findMany({
       orderBy: { startedAt: 'desc' },
       take: 50,
-      include: {
-        project: {
-          select: {
-            name: true,
-            slug: true,
-          },
-        },
-      },
+      include: { project: { select: { name: true, slug: true } } },
     })
   } catch (error) {
+    loadError = true
     console.error('Failed to fetch builds:', error)
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Builds</h1>
-          <p className="text-muted-foreground">Build history and logs</p>
-        </div>
-      </div>
-
-      <BuildsTable builds={builds} />
+    <div className="space-y-8">
+      <PageHeader
+        eyebrow="История"
+        title="Сборки"
+        description="Результаты и логи последних сборок всех подключённых сайтов. Запуск сборок появится после подключения реального runner."
+      />
+      <BuildsTable builds={builds} loadError={loadError} />
     </div>
   )
 }

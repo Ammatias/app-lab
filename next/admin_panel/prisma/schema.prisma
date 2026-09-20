@@ -29,6 +29,7 @@ model Project {
   slug        String    @unique
   url         String
   status      String    @default("active")
+  siteType    String    @default("portfolio")
   description String?
   thumbnail   String?
   userId      String

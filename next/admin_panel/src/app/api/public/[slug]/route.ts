@@ -1,23 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
-import { jsonObjectSchema } from '@/lib/json-schema'
+import { getSiteAdapter } from '@/lib/site-adapters'
 import type { Prisma } from '@prisma/client'
 import { z } from 'zod'
 
 interface Props {
   params: Promise<{ slug: string }>
 }
-
-const updatePublicProjectSchema = z
-  .object({
-    content: jsonObjectSchema.optional(),
-    settings: jsonObjectSchema.optional(),
-  })
-  .strict()
-  .refine(
-    ({ content, settings }) => content !== undefined || settings !== undefined,
-    { message: 'At least one of content or settings is required' }
-  )
 
 /**
  * GET /api/public/[slug]
@@ -36,6 +25,7 @@ export async function GET(request: NextRequest, { params }: Props) {
         description: true,
         url: true,
         status: true,
+        siteType: true,
         thumbnail: true,
         content: true,
         settings: true,
@@ -79,6 +69,16 @@ export async function GET(request: NextRequest, { params }: Props) {
 export async function PUT(request: NextRequest, { params }: Props) {
   try {
     const { slug } = await params
+    const existing = await db.project.findUnique({ where: { slug }, select: { siteType: true } })
+    if (!existing) return NextResponse.json({ error: 'Project not found' }, { status: 404 })
+    const adapter = getSiteAdapter(existing.siteType)
+    if (!adapter) return NextResponse.json({ error: 'Unsupported site type' }, { status: 422 })
+    const updatePublicProjectSchema = z.object({
+      content: adapter.contentSchema.optional(),
+      settings: adapter.settingsSchema.optional(),
+    }).strict().refine(({ content, settings }) => content !== undefined || settings !== undefined, {
+      message: 'At least one of content or settings is required',
+    })
     const validation = updatePublicProjectSchema.parse(await request.json())
 
     const updateData: Prisma.ProjectUpdateInput = {}
@@ -99,6 +99,7 @@ export async function PUT(request: NextRequest, { params }: Props) {
         id: project.id,
         name: project.name,
         slug: project.slug,
+        siteType: project.siteType,
         content: project.content,
         settings: project.settings,
         updatedAt: project.updatedAt,

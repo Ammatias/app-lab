@@ -5,13 +5,14 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, BriefcaseBusiness, LayoutTemplate } from 'lucide-react'
 import Link from 'next/link'
 
 export default function NewProjectPage() {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [siteType, setSiteType] = useState<'generic' | 'portfolio'>('generic')
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -51,15 +52,15 @@ export default function NewProjectPage() {
           </Link>
         </Button>
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">New Project</h1>
-          <p className="text-muted-foreground">Create a new project</p>
+          <h1 className="text-3xl font-bold tracking-tight">Новый сайт</h1>
+          <p className="text-muted-foreground">Подключите сайт и выберите подходящий редактор</p>
         </div>
       </div>
 
       <Card className="max-w-2xl">
         <CardHeader>
-          <CardTitle>Project Details</CardTitle>
-          <CardDescription>Enter the basic information about your project</CardDescription>
+          <CardTitle>Основные данные</CardTitle>
+          <CardDescription>Тип определяет структуру контента и доступные поля редактора.</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -69,21 +70,35 @@ export default function NewProjectPage() {
               </div>
             )}
 
+            <fieldset className="space-y-3">
+              <legend className="text-sm font-medium">Тип сайта</legend>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {[
+                  { value: 'generic' as const, title: 'Универсальный', description: 'Главный экран и свободные секции', icon: LayoutTemplate },
+                  { value: 'portfolio' as const, title: 'Портфолио', description: 'Резюме, проекты и галереи', icon: BriefcaseBusiness },
+                ].map((option) => {
+                  const Icon = option.icon
+                  const selected = siteType === option.value
+                  return <label key={option.value} className={`cursor-pointer rounded-2xl border p-4 transition-colors ${selected ? 'border-primary bg-accent' : 'hover:bg-muted'}`}><input className="sr-only" type="radio" name="siteType" value={option.value} checked={selected} onChange={() => setSiteType(option.value)} /><Icon className="h-5 w-5 text-primary" /><span className="mt-3 block text-sm font-semibold">{option.title}</span><span className="mt-1 block text-xs leading-5 text-muted-foreground">{option.description}</span></label>
+                })}
+              </div>
+            </fieldset>
+
             <div className="space-y-2">
               <label htmlFor="name" className="text-sm font-medium">
-                Name
+                Название
               </label>
               <Input
                 id="name"
                 name="name"
-                placeholder="My Project"
+                placeholder="Сайт компании"
                 required
               />
             </div>
 
             <div className="space-y-2">
               <label htmlFor="slug" className="text-sm font-medium">
-                Slug
+                Slug для API
               </label>
               <Input
                 id="slug"
@@ -91,7 +106,7 @@ export default function NewProjectPage() {
                 placeholder="my-project"
                 required
                 pattern="[a-z0-9-]+"
-                title="Lowercase letters, numbers, and hyphens only"
+                title="Только строчные латинские буквы, цифры и дефисы"
               />
             </div>
 
@@ -110,18 +125,18 @@ export default function NewProjectPage() {
 
             <div className="space-y-2">
               <label htmlFor="description" className="text-sm font-medium">
-                Description
+                Описание
               </label>
               <Input
                 id="description"
                 name="description"
-                placeholder="Project description"
+                placeholder="Короткое внутреннее описание сайта"
               />
             </div>
 
             <div className="space-y-2">
               <label htmlFor="status" className="text-sm font-medium">
-                Status
+                Статус
               </label>
               <select
                 id="status"
@@ -129,18 +144,18 @@ export default function NewProjectPage() {
                 className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm"
                 defaultValue="active"
               >
-                <option value="active">Active</option>
-                <option value="development">Development</option>
-                <option value="archived">Archived</option>
+                <option value="active">Активен</option>
+                <option value="development">В разработке</option>
+                <option value="archived">В архиве</option>
               </select>
             </div>
 
             <div className="flex gap-2 pt-4">
               <Button type="submit" disabled={isLoading}>
-                {isLoading ? 'Creating...' : 'Create Project'}
+                {isLoading ? 'Создаём…' : 'Создать сайт'}
               </Button>
               <Button type="button" variant="outline" asChild>
-                <Link href="/projects">Cancel</Link>
+                <Link href="/projects">Отмена</Link>
               </Button>
             </div>
           </form>

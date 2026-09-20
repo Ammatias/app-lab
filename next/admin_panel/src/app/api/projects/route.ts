@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 import { z } from 'zod'
+import { getSiteAdapter, siteTypeSchema } from '@/lib/site-adapters'
 
 const createProjectSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -8,6 +9,7 @@ const createProjectSchema = z.object({
   url: z.string().url('Invalid URL'),
   description: z.string().optional(),
   status: z.enum(['active', 'development', 'archived']).optional().default('active'),
+  siteType: siteTypeSchema.optional().default('generic'),
 })
 
 export async function GET() {
@@ -39,6 +41,10 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
     const validation = createProjectSchema.parse(body)
+    const adapter = getSiteAdapter(validation.siteType)
+    if (!adapter) {
+      return NextResponse.json({ message: 'Unsupported site type' }, { status: 400 })
+    }
 
     // TODO: Get user ID from session (after auth implementation)
     const userId = 'system' // Temporary placeholder
@@ -47,6 +53,8 @@ export async function POST(request: NextRequest) {
       data: {
         ...validation,
         userId,
+        content: adapter.defaults.content,
+        settings: adapter.defaults.settings,
       },
     })
 

@@ -1,910 +1,155 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { AlertCircle, BriefcaseBusiness, CheckCircle2, FileUser, LayoutTemplate, Palette, Plus, Save } from 'lucide-react'
+import { NavigationGuard } from '@/components/forms/navigation-guard'
+import { PortfolioPreview } from '@/components/editor/portfolio-preview'
+import { RepeatableCard } from '@/components/editor/repeatable-card'
+import { StringListEditor } from '@/components/editor/string-list-editor'
+import type { ContentData, Course, EditorMediaItem, Education, Experience, PortfolioProjectData, SettingsData } from '@/components/editor/types'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import Link from 'next/link'
-import { ArrowLeft, Save, Plus, Trash2 } from 'lucide-react'
+import { FormField } from '@/components/ui/form-field'
+import { Input } from '@/components/ui/input'
+import { cn } from '@/lib/utils'
 
-interface HeroData {
-  title: string
-  subtitle: string
-  ctaPrimary: { text: string; href: string }
-  ctaSecondary: { text: string; href: string }
+export type { ContentData, SettingsData } from '@/components/editor/types'
+
+type Section = 'hero' | 'resume' | 'projects' | 'appearance'
+
+const sections = [
+  { id: 'hero' as const, label: 'Главная', description: 'Заголовок и действия', icon: LayoutTemplate },
+  { id: 'resume' as const, label: 'Резюме', description: 'Опыт и контакты', icon: FileUser },
+  { id: 'projects' as const, label: 'Проекты', description: 'Работы и галереи', icon: BriefcaseBusiness },
+  { id: 'appearance' as const, label: 'Оформление', description: 'Тема сайта', icon: Palette },
+]
+
+const defaults: ContentData = {
+  hero: { title: '', subtitle: '', ctaPrimary: { text: '', href: '' }, ctaSecondary: { text: '', href: '' } },
+  resume: { about: '', skills: [], experience: [], education: [], courses: [], contacts: { email: '', github: '', telegram: '', phone: '' } },
+  projects: [],
 }
 
-interface Experience {
-  id: string
-  position: string
-  company: string
-  period: string
-  description: string[]
+const newId = () => typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`
+const move = <T,>(items: T[], index: number, delta: -1 | 1) => {
+  const target = index + delta
+  if (target < 0 || target >= items.length) return items
+  const next = [...items]
+  ;[next[index], next[target]] = [next[target], next[index]]
+  return next
 }
 
-interface Education {
-  id: string
-  degree: string
-  institution: string
-  year: string
-  specialty?: string
-}
-
-interface Course {
-  id: string
-  year: string
-  title: string
-  institution: string
-  specialty?: string
-}
-
-interface Contacts {
-  email: string
-  github?: string
-  telegram?: string
-  phone?: string
-}
-
-interface ResumeData {
-  about: string
-  skills: string[]
-  experience: Experience[]
-  education: Education[]
-  courses: Course[]
-  contacts: Contacts
-}
-
-interface ProjectData {
-  id: string
-  title: string
-  description: string
-  fullDescription?: string
-  tech: string[]
-  features?: string[]
-  github?: string
-  demo?: string
-  screenshots?: string[]
-}
-
-interface ContentData {
-  hero: HeroData
-  resume: ResumeData
-  projects: ProjectData[]
-}
-
-interface SettingsData {
-  theme: 'dark' | 'light'
-  colors: Record<string, string>
-}
-
-interface EditContentFormProps {
+export function EditContentForm({
+  projectSlug,
+  siteUrl,
+  initialContent,
+  initialSettings,
+  availableMedia,
+}: {
   projectSlug: string
+  siteUrl: string
   initialContent?: ContentData
   initialSettings?: SettingsData
-}
-
-export function EditContentForm({ projectSlug, initialContent, initialSettings }: EditContentFormProps) {
-  const router = useRouter()
-  const [isLoading, setIsLoading] = useState(false)
+  availableMedia: EditorMediaItem[]
+}) {
+  const initial = initialContent || defaults
+  const initialAppearance: SettingsData = initialSettings || { theme: 'dark', colors: {} }
+  const [content, setContent] = useState<ContentData>(initial)
+  const [settings, setSettings] = useState<SettingsData>(initialAppearance)
+  const [section, setSection] = useState<Section>('hero')
+  const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [success, setSuccess] = useState(false)
-  const [activeTab, setActiveTab] = useState<'hero' | 'resume' | 'projects' | 'settings'>('hero')
+  const [saved, setSaved] = useState(false)
+  const [savedSnapshot, setSavedSnapshot] = useState(() => JSON.stringify({ content: initial, settings: initialAppearance }))
+  const payload = { content, settings }
+  const isDirty = JSON.stringify(payload) !== savedSnapshot
 
-  const [hero, setHero] = useState<HeroData>(initialContent?.hero || {
-    title: '',
-    subtitle: '',
-    ctaPrimary: { text: '', href: '' },
-    ctaSecondary: { text: '', href: '' }
-  })
-
-  const [resume, setResume] = useState<ResumeData>(initialContent?.resume || {
-    about: '',
-    skills: [],
-    experience: [],
-    education: [],
-    courses: [],
-    contacts: { email: '', github: '', telegram: '', phone: '' }
-  })
-
-  const [projects, setProjects] = useState<ProjectData[]>(initialContent?.projects || [])
-
-  const [theme, setTheme] = useState<'dark' | 'light'>(initialSettings?.theme || 'dark')
-
-  const [skillsInput, setSkillsInput] = useState(resume.skills.join(', '))
-
-  useEffect(() => {
-    if (initialContent?.resume) {
-      setSkillsInput(initialContent.resume.skills.join(', '))
-    }
-  }, [initialContent])
-
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-    setIsLoading(true)
+  async function save(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    setSaving(true)
     setError(null)
-    setSuccess(false)
-
-    const content: ContentData = {
-      hero,
-      resume: {
-        ...resume,
-        skills: skillsInput.split(',').map(s => s.trim()).filter(s => s),
-      },
-      projects,
-    }
-
-    const settings: SettingsData = {
-      theme,
-      colors: initialSettings?.colors || {},
-    }
-
+    setSaved(false)
     try {
       const response = await fetch(`/api/public/${projectSlug}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content, settings }),
+        method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload),
       })
-
-      if (!response.ok) {
-        const error = await response.json()
-        throw new Error(error.message || 'Failed to update content')
-      }
-
-      setSuccess(true)
-      setTimeout(() => setSuccess(false), 3000)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Something went wrong')
+      const result = await response.json()
+      if (!response.ok) throw new Error(result.message || result.error || 'Не удалось сохранить контент')
+      setSavedSnapshot(JSON.stringify(payload))
+      setSaved(true)
+      window.setTimeout(() => setSaved(false), 3000)
+    } catch (saveError) {
+      setError(saveError instanceof Error ? saveError.message : 'Не удалось сохранить контент')
     } finally {
-      setIsLoading(false)
+      setSaving(false)
     }
   }
 
-  // Hero Section
-  const renderHeroSection = () => (
-    <Card>
-      <CardHeader>
-        <CardTitle>Hero Section</CardTitle>
-        <CardDescription>Main page header and subtitle</CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="space-y-2">
-          <label htmlFor="hero-title" className="text-sm font-medium">Title</label>
-          <Input
-            id="hero-title"
-            value={hero.title}
-            onChange={(e) => setHero({ ...hero, title: e.target.value })}
-            placeholder="Привет, я Разработчик"
-            className="bg-background text-foreground"
-          />
-        </div>
-
-        <div className="space-y-2">
-          <label htmlFor="hero-subtitle" className="text-sm font-medium">Subtitle</label>
-          <Input
-            id="hero-subtitle"
-            value={hero.subtitle}
-            onChange={(e) => setHero({ ...hero, subtitle: e.target.value })}
-            placeholder="Full-stack разработчик"
-            className="bg-background text-foreground"
-          />
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <label htmlFor="cta-primary-text" className="text-sm font-medium">CTA Primary Text</label>
-            <Input
-              id="cta-primary-text"
-              value={hero.ctaPrimary.text}
-              onChange={(e) => setHero({ ...hero, ctaPrimary: { ...hero.ctaPrimary, text: e.target.value } })}
-              placeholder="Посмотреть проекты"
-              className="bg-background text-foreground"
-            />
-          </div>
-          <div className="space-y-2">
-            <label htmlFor="cta-primary-href" className="text-sm font-medium">CTA Primary URL</label>
-            <Input
-              id="cta-primary-href"
-              value={hero.ctaPrimary.href}
-              onChange={(e) => setHero({ ...hero, ctaPrimary: { ...hero.ctaPrimary, href: e.target.value } })}
-              placeholder="#projects"
-              className="bg-background text-foreground"
-            />
-          </div>
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <label htmlFor="cta-secondary-text" className="text-sm font-medium">CTA Secondary Text</label>
-            <Input
-              id="cta-secondary-text"
-              value={hero.ctaSecondary.text}
-              onChange={(e) => setHero({ ...hero, ctaSecondary: { ...hero.ctaSecondary, text: e.target.value } })}
-              placeholder="Резюме"
-              className="bg-background text-foreground"
-            />
-          </div>
-          <div className="space-y-2">
-            <label htmlFor="cta-secondary-href" className="text-sm font-medium">CTA Secondary URL</label>
-            <Input
-              id="cta-secondary-href"
-              value={hero.ctaSecondary.href}
-              onChange={(e) => setHero({ ...hero, ctaSecondary: { ...hero.ctaSecondary, href: e.target.value } })}
-              placeholder="/resume"
-              className="bg-background text-foreground"
-            />
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  )
-
-  // Resume Section
-  const renderResumeSection = () => (
-    <div className="space-y-6">
-      {/* About */}
-      <Card>
-        <CardHeader>
-          <CardTitle>About</CardTitle>
-          <CardDescription>Personal information and summary</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <label htmlFor="resume-about" className="text-sm font-medium">About</label>
-            <textarea
-              id="resume-about"
-              value={resume.about}
-              onChange={(e) => setResume({ ...resume, about: e.target.value })}
-              placeholder="О себе..."
-              rows={4}
-              className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <label htmlFor="resume-skills" className="text-sm font-medium">Skills (comma-separated)</label>
-            <Input
-              id="resume-skills"
-              value={skillsInput}
-              onChange={(e) => setSkillsInput(e.target.value)}
-              placeholder="JavaScript, TypeScript, React"
-              className="bg-background text-foreground"
-            />
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Experience */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle>Experience</CardTitle>
-              <CardDescription>Work experience</CardDescription>
-            </div>
-            <Button
-              type="button"
-              size="sm"
-              onClick={() => setResume({
-                ...resume,
-                experience: [...resume.experience, { id: Date.now().toString(), position: '', company: '', period: '', description: [] }]
-              })}
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              Add
-            </Button>
-          </div>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {resume.experience.map((job, index) => (
-            <div key={job.id} className="border rounded-lg p-4 space-y-3">
-              <div className="flex items-center justify-between">
-                <h4 className="font-medium">Experience #{index + 1}</h4>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setResume({
-                    ...resume,
-                    experience: resume.experience.filter(e => e.id !== job.id)
-                  })}
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Position</label>
-                  <Input
-                    value={job.position}
-                    onChange={(e) => {
-                      const newExperience = [...resume.experience]
-                      newExperience[index].position = e.target.value
-                      setResume({ ...resume, experience: newExperience })
-                    }}
-                    placeholder="Инженер-программист"
-                    className="bg-background text-foreground"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Company</label>
-                  <Input
-                    value={job.company}
-                    onChange={(e) => {
-                      const newExperience = [...resume.experience]
-                      newExperience[index].company = e.target.value
-                      setResume({ ...resume, experience: newExperience })
-                    }}
-                    placeholder="Company name"
-                    className="bg-background text-foreground"
-                  />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Period</label>
-                <Input
-                  value={job.period}
-                  onChange={(e) => {
-                    const newExperience = [...resume.experience]
-                    newExperience[index].period = e.target.value
-                    setResume({ ...resume, experience: newExperience })
-                  }}
-                  placeholder="Март 2026 — Настоящее время"
-                  className="bg-background text-foreground"
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Description (one per line)</label>
-                <textarea
-                  value={job.description.join('\n')}
-                  onChange={(e) => {
-                    const newExperience = [...resume.experience]
-                    newExperience[index].description = e.target.value.split('\n').filter(l => l.trim())
-                    setResume({ ...resume, experience: newExperience })
-                  }}
-                  placeholder="Описание обязанностей..."
-                  rows={4}
-                  className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground"
-                />
-              </div>
-            </div>
-          ))}
-        </CardContent>
-      </Card>
-
-      {/* Education */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle>Education</CardTitle>
-              <CardDescription>Educational background</CardDescription>
-            </div>
-            <Button
-              type="button"
-              size="sm"
-              onClick={() => setResume({
-                ...resume,
-                education: [...resume.education, { id: Date.now().toString(), degree: '', institution: '', year: '', specialty: '' }]
-              })}
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              Add
-            </Button>
-          </div>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {resume.education.map((edu, index) => (
-            <div key={edu.id} className="border rounded-lg p-4 space-y-3">
-              <div className="flex items-center justify-between">
-                <h4 className="font-medium">Education #{index + 1}</h4>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setResume({
-                    ...resume,
-                    education: resume.education.filter(e => e.id !== edu.id)
-                  })}
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Degree</label>
-                  <Input
-                    value={edu.degree}
-                    onChange={(e) => {
-                      const newEducation = [...resume.education]
-                      newEducation[index].degree = e.target.value
-                      setResume({ ...resume, education: newEducation })
-                    }}
-                    placeholder="Среднее специальное"
-                    className="bg-background text-foreground"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Year</label>
-                  <Input
-                    value={edu.year}
-                    onChange={(e) => {
-                      const newEducation = [...resume.education]
-                      newEducation[index].year = e.target.value
-                      setResume({ ...resume, education: newEducation })
-                    }}
-                    placeholder="2023"
-                    className="bg-background text-foreground"
-                  />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Institution</label>
-                <Input
-                  value={edu.institution}
-                  onChange={(e) => {
-                    const newEducation = [...resume.education]
-                    newEducation[index].institution = e.target.value
-                    setResume({ ...resume, education: newEducation })
-                  }}
-                  placeholder="Пример университета"
-                  className="bg-background text-foreground"
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Specialty</label>
-                <Input
-                  value={edu.specialty || ''}
-                  onChange={(e) => {
-                    const newEducation = [...resume.education]
-                    newEducation[index].specialty = e.target.value
-                    setResume({ ...resume, education: newEducation })
-                  }}
-                  placeholder="Информационные системы и программирование"
-                  className="bg-background text-foreground"
-                />
-              </div>
-            </div>
-          ))}
-        </CardContent>
-      </Card>
-
-      {/* Courses */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle>Courses</CardTitle>
-              <CardDescription>Professional development courses</CardDescription>
-            </div>
-            <Button
-              type="button"
-              size="sm"
-              onClick={() => setResume({
-                ...resume,
-                courses: [...resume.courses, { id: Date.now().toString(), year: '', title: '', institution: '', specialty: '' }]
-              })}
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              Add
-            </Button>
-          </div>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {resume.courses.map((course, index) => (
-            <div key={course.id} className="border rounded-lg p-4 space-y-3">
-              <div className="flex items-center justify-between">
-                <h4 className="font-medium">Course #{index + 1}</h4>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setResume({
-                    ...resume,
-                    courses: resume.courses.filter(c => c.id !== course.id)
-                  })}
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Title</label>
-                  <Input
-                    value={course.title}
-                    onChange={(e) => {
-                      const newCourses = [...resume.courses]
-                      newCourses[index].title = e.target.value
-                      setResume({ ...resume, courses: newCourses })
-                    }}
-                    placeholder="Системный администратор"
-                    className="bg-background text-foreground"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Year</label>
-                  <Input
-                    value={course.year}
-                    onChange={(e) => {
-                      const newCourses = [...resume.courses]
-                      newCourses[index].year = e.target.value
-                      setResume({ ...resume, courses: newCourses })
-                    }}
-                    placeholder="2023"
-                    className="bg-background text-foreground"
-                  />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Institution</label>
-                <Input
-                  value={course.institution}
-                  onChange={(e) => {
-                    const newCourses = [...resume.courses]
-                    newCourses[index].institution = e.target.value
-                    setResume({ ...resume, courses: newCourses })
-                  }}
-                  placeholder="Пример университета"
-                  className="bg-background text-foreground"
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Specialty</label>
-                <Input
-                  value={course.specialty || ''}
-                  onChange={(e) => {
-                    const newCourses = [...resume.courses]
-                    newCourses[index].specialty = e.target.value
-                    setResume({ ...resume, courses: newCourses })
-                  }}
-                  placeholder="Администрирование информационно-коммуникационных систем"
-                  className="bg-background text-foreground"
-                />
-              </div>
-            </div>
-          ))}
-        </CardContent>
-      </Card>
-
-      {/* Contacts */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Contacts</CardTitle>
-          <CardDescription>Contact information</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <label htmlFor="contact-email" className="text-sm font-medium">Email</label>
-              <Input
-                id="contact-email"
-                value={resume.contacts.email}
-                onChange={(e) => setResume({ ...resume, contacts: { ...resume.contacts, email: e.target.value } })}
-                placeholder="email@example.com"
-                type="email"
-                className="bg-background text-foreground"
-              />
-            </div>
-            <div className="space-y-2">
-              <label htmlFor="contact-phone" className="text-sm font-medium">Phone</label>
-              <Input
-                id="contact-phone"
-                value={resume.contacts.phone || ''}
-                onChange={(e) => setResume({ ...resume, contacts: { ...resume.contacts, phone: e.target.value } })}
-                placeholder="+0 000 000 00 00"
-                className="bg-background text-foreground"
-              />
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <label htmlFor="contact-github" className="text-sm font-medium">GitHub</label>
-              <Input
-                id="contact-github"
-                value={resume.contacts.github || ''}
-                onChange={(e) => setResume({ ...resume, contacts: { ...resume.contacts, github: e.target.value } })}
-                placeholder="https://github.com/username"
-                className="bg-background text-foreground"
-              />
-            </div>
-            <div className="space-y-2">
-              <label htmlFor="contact-telegram" className="text-sm font-medium">Telegram</label>
-              <Input
-                id="contact-telegram"
-                value={resume.contacts.telegram || ''}
-                onChange={(e) => setResume({ ...resume, contacts: { ...resume.contacts, telegram: e.target.value } })}
-                placeholder="@username"
-                className="bg-background text-foreground"
-              />
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  )
-
-  // Settings
-  const renderSettings = () => (
-    <Card>
-      <CardHeader>
-        <CardTitle>Settings</CardTitle>
-        <CardDescription>Theme and appearance</CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="space-y-2">
-          <label htmlFor="theme" className="text-sm font-medium">Theme</label>
-          <select
-            id="theme"
-            value={theme}
-            onChange={(e) => setTheme(e.target.value as 'dark' | 'light')}
-            className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm text-foreground"
-          >
-            <option value="dark" className="bg-background text-foreground">Dark</option>
-            <option value="light" className="bg-background text-foreground">Light</option>
-          </select>
-        </div>
-      </CardContent>
-    </Card>
-  )
-
-  // Projects Section
-  const renderProjectsSection = () => (
-    <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle>Projects</CardTitle>
-              <CardDescription>Manage your portfolio projects</CardDescription>
-            </div>
-            <Button
-              type="button"
-              size="sm"
-              onClick={() => setProjects([
-                ...projects,
-                {
-                  id: Date.now().toString(),
-                  title: 'New Project',
-                  description: 'Project description',
-                  fullDescription: '',
-                  tech: [],
-                  features: [],
-                  github: '',
-                  demo: '',
-                  screenshots: []
-                }
-              ])}
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              Add Project
-            </Button>
-          </div>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          {projects.map((project, pIndex) => (
-            <div key={project.id} className="border rounded-lg p-4 space-y-4">
-              <div className="flex items-center justify-between">
-                <h4 className="font-medium">Project #{pIndex + 1}: {project.title}</h4>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setProjects(projects.filter(p => p.id !== project.id))}
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Title</label>
-                  <Input
-                    value={project.title}
-                    onChange={(e) => {
-                      const newProjects = [...projects]
-                      newProjects[pIndex].title = e.target.value
-                      setProjects(newProjects)
-                    }}
-                    placeholder="Project Title"
-                    className="bg-background text-foreground"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Demo URL</label>
-                  <Input
-                    value={project.demo || ''}
-                    onChange={(e) => {
-                      const newProjects = [...projects]
-                      newProjects[pIndex].demo = e.target.value
-                      setProjects(newProjects)
-                    }}
-                    placeholder="https://..."
-                    className="bg-background text-foreground"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Description</label>
-                <textarea
-                  value={project.description}
-                  onChange={(e) => {
-                    const newProjects = [...projects]
-                    newProjects[pIndex].description = e.target.value
-                    setProjects(newProjects)
-                  }}
-                  placeholder="Short description..."
-                  rows={2}
-                  className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Full Description</label>
-                <textarea
-                  value={project.fullDescription || ''}
-                  onChange={(e) => {
-                    const newProjects = [...projects]
-                    newProjects[pIndex].fullDescription = e.target.value
-                    setProjects(newProjects)
-                  }}
-                  placeholder="Full project description..."
-                  rows={4}
-                  className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">GitHub URL</label>
-                  <Input
-                    value={project.github || ''}
-                    onChange={(e) => {
-                      const newProjects = [...projects]
-                      newProjects[pIndex].github = e.target.value
-                      setProjects(newProjects)
-                    }}
-                    placeholder="https://github.com/..."
-                    className="bg-background text-foreground"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Tech Stack (comma-separated)</label>
-                  <Input
-                    value={project.tech?.join(', ') || ''}
-                    onChange={(e) => {
-                      const newProjects = [...projects]
-                      newProjects[pIndex].tech = e.target.value.split(',').map(s => s.trim()).filter(s => s)
-                      setProjects(newProjects)
-                    }}
-                    placeholder="Next.js, TypeScript, ..."
-                    className="bg-background text-foreground"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Features (one per line)</label>
-                <textarea
-                  value={project.features?.join('\n') || ''}
-                  onChange={(e) => {
-                    const newProjects = [...projects]
-                    newProjects[pIndex].features = e.target.value.split('\n').filter(l => l.trim())
-                    setProjects(newProjects)
-                  }}
-                  placeholder="Feature 1&#10;Feature 2"
-                  rows={3}
-                  className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground font-mono"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Screenshot Paths (one per line)</label>
-                <textarea
-                  value={project.screenshots?.join('\n') || ''}
-                  onChange={(e) => {
-                    const newProjects = [...projects]
-                    newProjects[pIndex].screenshots = e.target.value.split('\n').filter(l => l.trim())
-                    setProjects(newProjects)
-                  }}
-                  placeholder="/projects/project-name/hero.png&#10;/projects/project-name/screenshot-1.png"
-                  rows={3}
-                  className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground font-mono"
-                />
-              </div>
-
-              {project.screenshots && project.screenshots.length > 0 && (
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Preview:</label>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                    {project.screenshots.map((screenshot, sIndex) => (
-                      <div key={sIndex} className="relative aspect-video bg-muted rounded-md overflow-hidden">
-                        <img
-                          src={screenshot}
-                          alt={`Screenshot ${sIndex + 1}`}
-                          className="w-full h-full object-cover"
-                          onError={(e) => {
-                            (e.target as HTMLImageElement).src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjNmNGY2Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJtb25vc3BhY2UiIGZvbnQtc2l6ZT0iMTIiIGZpbGw9IiM5Y2EzYWYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5ObyBJbWFnZTwvdGV4dD48L3N2Zz4='
-                          }}
-                        />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          ))}
-
-          {projects.length === 0 && (
-            <div className="text-center py-8 text-muted-foreground">
-              <p>No projects yet. Click "Add Project" to create one.</p>
-            </div>
-          )}
-        </CardContent>
-      </Card>
-    </div>
-  )
-
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      {/* Tabs */}
-      <div className="flex gap-2 border-b pb-2">
-        <Button
-          type="button"
-          variant={activeTab === 'hero' ? 'default' : 'outline'}
-          onClick={() => setActiveTab('hero')}
-        >
-          Hero Section
-        </Button>
-        <Button
-          type="button"
-          variant={activeTab === 'resume' ? 'default' : 'outline'}
-          onClick={() => setActiveTab('resume')}
-        >
-          Resume
-        </Button>
-        <Button
-          type="button"
-          variant={activeTab === 'projects' ? 'default' : 'outline'}
-          onClick={() => setActiveTab('projects')}
-        >
-          Projects
-        </Button>
-        <Button
-          type="button"
-          variant={activeTab === 'settings' ? 'default' : 'outline'}
-          onClick={() => setActiveTab('settings')}
-        >
-          Settings
-        </Button>
+    <form onSubmit={save} className="space-y-6">
+      <NavigationGuard when={isDirty} />
+      {error && <div role="alert" className="flex items-start gap-3 rounded-2xl border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive"><AlertCircle className="mt-0.5 h-5 w-5 shrink-0" /><div><p className="font-semibold">Контент не сохранён</p><p className="mt-1">{error}</p></div></div>}
+      {saved && <div aria-live="polite" className="flex items-center gap-3 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-4 text-sm text-emerald-700 dark:text-emerald-300"><CheckCircle2 className="h-5 w-5" />Контент сохранён</div>}
+
+      <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_25rem]">
+        <div className="min-w-0 space-y-5">
+          <nav aria-label="Разделы контента" className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-2 2xl:grid-cols-4">
+            {sections.map((item) => {
+              const Icon = item.icon
+              return <button key={item.id} type="button" onClick={() => setSection(item.id)} aria-current={section === item.id ? 'page' : undefined} className={cn('flex min-h-16 items-center gap-3 rounded-2xl border p-3 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring', section === item.id ? 'border-primary bg-accent text-accent-foreground' : 'bg-card hover:bg-muted')}><Icon className="h-5 w-5 shrink-0" /><span><span className="block text-sm font-semibold">{item.label}</span><span className="mt-0.5 block text-xs opacity-70">{item.description}</span></span></button>
+            })}
+          </nav>
+
+          {section === 'hero' && <HeroEditor value={content.hero} onChange={(hero) => setContent({ ...content, hero })} />}
+          {section === 'resume' && <ResumeEditor value={content.resume} onChange={(resume) => setContent({ ...content, resume })} />}
+          {section === 'projects' && <ProjectsEditor values={content.projects} media={availableMedia} onChange={(projects) => setContent({ ...content, projects })} />}
+          {section === 'appearance' && <AppearanceEditor value={settings} onChange={setSettings} />}
+        </div>
+        <PortfolioPreview content={content} settings={settings} siteUrl={siteUrl} activeSection={section} />
       </div>
 
-      {error && (
-        <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
-          {error}
-        </div>
-      )}
-
-      {success && (
-        <div className="rounded-md bg-green-500/10 p-3 text-sm text-green-500">
-          Content saved successfully!
-        </div>
-      )}
-
-      {activeTab === 'hero' && renderHeroSection()}
-      {activeTab === 'resume' && renderResumeSection()}
-      {activeTab === 'projects' && renderProjectsSection()}
-      {activeTab === 'settings' && renderSettings()}
-
-      <div className="flex gap-2">
-        <Button type="submit" disabled={isLoading}>
-          <Save className="mr-2 h-4 w-4" />
-          {isLoading ? 'Saving...' : 'Save Changes'}
-        </Button>
-        <Button type="button" variant="outline" asChild>
-          <Link href="/projects">Cancel</Link>
-        </Button>
+      <div className="sticky bottom-4 z-20 flex flex-col gap-3 rounded-2xl border bg-card/95 p-3 shadow-xl backdrop-blur sm:flex-row sm:items-center sm:justify-between">
+        <div aria-live="polite" className="flex items-center gap-2 text-sm">{isDirty ? <><span className="h-2 w-2 rounded-full bg-amber-500" /><span>Есть несохранённые изменения</span></> : <span className="text-muted-foreground">Все изменения сохранены</span>}</div>
+        <Button type="submit" disabled={saving || !isDirty}><Save className="mr-2 h-4 w-4" />{saving ? 'Сохраняем…' : 'Сохранить контент'}</Button>
       </div>
     </form>
   )
+}
+
+function HeroEditor({ value, onChange }: { value: ContentData['hero']; onChange: (value: ContentData['hero']) => void }) {
+  return <Card><CardHeader><CardTitle>Главный экран</CardTitle><CardDescription>Первое сообщение, которое видит посетитель.</CardDescription></CardHeader><CardContent className="grid gap-5 md:grid-cols-2"><div className="md:col-span-2"><FormField label="Заголовок" htmlFor="hero-title"><Input id="hero-title" value={value.title} onChange={(event) => onChange({ ...value, title: event.target.value })} /></FormField></div><div className="md:col-span-2"><FormField label="Подзаголовок" htmlFor="hero-subtitle"><textarea id="hero-subtitle" value={value.subtitle} onChange={(event) => onChange({ ...value, subtitle: event.target.value })} rows={4} className="w-full rounded-xl border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" /></FormField></div><CtaFields prefix="primary" label="Основное действие" value={value.ctaPrimary} onChange={(ctaPrimary) => onChange({ ...value, ctaPrimary })} /><CtaFields prefix="secondary" label="Дополнительное действие" value={value.ctaSecondary} onChange={(ctaSecondary) => onChange({ ...value, ctaSecondary })} /></CardContent></Card>
+}
+
+function CtaFields({ prefix, label, value, onChange }: { prefix: string; label: string; value: { text: string; href: string }; onChange: (value: { text: string; href: string }) => void }) {
+  return <fieldset className="space-y-4 rounded-xl border p-4"><legend className="px-1 text-sm font-semibold">{label}</legend><FormField label="Текст кнопки" htmlFor={`${prefix}-text`}><Input id={`${prefix}-text`} value={value.text} onChange={(event) => onChange({ ...value, text: event.target.value })} /></FormField><FormField label="Ссылка" htmlFor={`${prefix}-href`}><Input id={`${prefix}-href`} value={value.href} onChange={(event) => onChange({ ...value, href: event.target.value })} className="font-mono" /></FormField></fieldset>
+}
+
+function ResumeEditor({ value, onChange }: { value: ContentData['resume']; onChange: (value: ContentData['resume']) => void }) {
+  const updateExperience = (index: number, item: Experience) => onChange({ ...value, experience: value.experience.map((current, itemIndex) => itemIndex === index ? item : current) })
+  return <div className="space-y-5">
+    <Card><CardHeader><CardTitle>О себе и навыки</CardTitle></CardHeader><CardContent className="space-y-5"><FormField label="О себе" htmlFor="resume-about"><textarea id="resume-about" value={value.about} onChange={(event) => onChange({ ...value, about: event.target.value })} rows={6} className="w-full rounded-xl border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" /></FormField><StringListEditor label="Навыки" values={value.skills} onChange={(skills) => onChange({ ...value, skills })} placeholder="Например, Docker" /></CardContent></Card>
+    <SectionHeading title="Опыт работы" action={() => onChange({ ...value, experience: [...value.experience, { id: newId(), position: '', company: '', period: '', description: [] }] })} />
+    {value.experience.map((item, index) => <RepeatableCard key={item.id} title={item.position || `Место работы ${index + 1}`} subtitle={item.company} first={index === 0} last={index === value.experience.length - 1} onMoveUp={() => onChange({ ...value, experience: move(value.experience, index, -1) })} onMoveDown={() => onChange({ ...value, experience: move(value.experience, index, 1) })} onDuplicate={() => onChange({ ...value, experience: [...value.experience.slice(0, index + 1), { ...item, id: newId() }, ...value.experience.slice(index + 1)] })} onDelete={() => onChange({ ...value, experience: value.experience.filter((_, itemIndex) => itemIndex !== index) })}><div className="grid gap-4 md:grid-cols-2"><FormField label="Должность" htmlFor={`position-${item.id}`}><Input id={`position-${item.id}`} value={item.position} onChange={(event) => updateExperience(index, { ...item, position: event.target.value })} /></FormField><FormField label="Организация" htmlFor={`company-${item.id}`}><Input id={`company-${item.id}`} value={item.company} onChange={(event) => updateExperience(index, { ...item, company: event.target.value })} /></FormField><div className="md:col-span-2"><FormField label="Период" htmlFor={`period-${item.id}`}><Input id={`period-${item.id}`} value={item.period} onChange={(event) => updateExperience(index, { ...item, period: event.target.value })} /></FormField></div></div><StringListEditor label="Обязанности и результаты" values={item.description} onChange={(description) => updateExperience(index, { ...item, description })} /></RepeatableCard>)}
+    <SimpleRecords title="Образование" items={value.education} kind="education" onChange={(education) => onChange({ ...value, education })} />
+    <SimpleRecords title="Курсы" items={value.courses} kind="course" onChange={(courses) => onChange({ ...value, courses })} />
+    <Card><CardHeader><CardTitle>Контакты</CardTitle></CardHeader><CardContent className="grid gap-4 md:grid-cols-2">{(['email', 'phone', 'github', 'telegram'] as const).map((field) => <FormField key={field} label={{ email: 'Email', phone: 'Телефон', github: 'GitHub', telegram: 'Telegram' }[field]} htmlFor={`contact-${field}`}><Input id={`contact-${field}`} value={value.contacts[field] || ''} onChange={(event) => onChange({ ...value, contacts: { ...value.contacts, [field]: event.target.value } })} /></FormField>)}</CardContent></Card>
+  </div>
+}
+
+function SimpleRecords<T extends Education | Course>({ title, items, kind, onChange }: { title: string; items: T[]; kind: 'education' | 'course'; onChange: (items: T[]) => void }) {
+  const blank = (kind === 'education' ? { id: newId(), degree: '', institution: '', year: '', specialty: '' } : { id: newId(), title: '', institution: '', year: '', specialty: '' }) as T
+  return <div className="space-y-3"><SectionHeading title={title} action={() => onChange([...items, blank])} />{items.map((item, index) => <RepeatableCard key={item.id} title={('degree' in item ? item.degree : item.title) || `${title}: запись ${index + 1}`} subtitle={item.institution} first={index === 0} last={index === items.length - 1} onMoveUp={() => onChange(move(items, index, -1))} onMoveDown={() => onChange(move(items, index, 1))} onDuplicate={() => onChange([...items.slice(0, index + 1), { ...item, id: newId() }, ...items.slice(index + 1)])} onDelete={() => onChange(items.filter((_, itemIndex) => itemIndex !== index))}><div className="grid gap-4 md:grid-cols-2"><FormField label={kind === 'education' ? 'Квалификация' : 'Название'} htmlFor={`${kind}-title-${item.id}`}><Input id={`${kind}-title-${item.id}`} value={'degree' in item ? item.degree : item.title} onChange={(event) => onChange(items.map((current, itemIndex) => itemIndex === index ? ({ ...current, [kind === 'education' ? 'degree' : 'title']: event.target.value } as T) : current))} /></FormField><FormField label="Год" htmlFor={`${kind}-year-${item.id}`}><Input id={`${kind}-year-${item.id}`} value={item.year} onChange={(event) => onChange(items.map((current, itemIndex) => itemIndex === index ? { ...current, year: event.target.value } : current))} /></FormField><FormField label="Организация" htmlFor={`${kind}-institution-${item.id}`}><Input id={`${kind}-institution-${item.id}`} value={item.institution} onChange={(event) => onChange(items.map((current, itemIndex) => itemIndex === index ? { ...current, institution: event.target.value } : current))} /></FormField><FormField label="Специальность" htmlFor={`${kind}-specialty-${item.id}`}><Input id={`${kind}-specialty-${item.id}`} value={item.specialty || ''} onChange={(event) => onChange(items.map((current, itemIndex) => itemIndex === index ? { ...current, specialty: event.target.value } : current))} /></FormField></div></RepeatableCard>)}</div>
+}
+
+function ProjectsEditor({ values, media, onChange }: { values: PortfolioProjectData[]; media: EditorMediaItem[]; onChange: (values: PortfolioProjectData[]) => void }) {
+  const update = (index: number, project: PortfolioProjectData) => onChange(values.map((current, itemIndex) => itemIndex === index ? project : current))
+  return <div className="space-y-4"><SectionHeading title="Проекты портфолио" action={() => onChange([...values, { id: newId(), title: '', description: '', fullDescription: '', tech: [], features: [], github: '', demo: '', screenshots: [] }])} />{values.map((project, index) => <RepeatableCard key={project.id} title={project.title || `Проект ${index + 1}`} subtitle={project.description} first={index === 0} last={index === values.length - 1} onMoveUp={() => onChange(move(values, index, -1))} onMoveDown={() => onChange(move(values, index, 1))} onDuplicate={() => onChange([...values.slice(0, index + 1), { ...project, id: newId(), title: `${project.title} — копия` }, ...values.slice(index + 1)])} onDelete={() => onChange(values.filter((_, itemIndex) => itemIndex !== index))}><div className="grid gap-4 md:grid-cols-2"><FormField label="Название" htmlFor={`project-title-${project.id}`}><Input id={`project-title-${project.id}`} value={project.title} onChange={(event) => update(index, { ...project, title: event.target.value })} /></FormField><FormField label="Demo URL" htmlFor={`project-demo-${project.id}`}><Input id={`project-demo-${project.id}`} value={project.demo || ''} onChange={(event) => update(index, { ...project, demo: event.target.value })} /></FormField><div className="md:col-span-2"><FormField label="Краткое описание" htmlFor={`project-description-${project.id}`}><textarea id={`project-description-${project.id}`} value={project.description} onChange={(event) => update(index, { ...project, description: event.target.value })} rows={3} className="w-full rounded-xl border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" /></FormField></div><div className="md:col-span-2"><FormField label="Полное описание" htmlFor={`project-full-${project.id}`}><textarea id={`project-full-${project.id}`} value={project.fullDescription || ''} onChange={(event) => update(index, { ...project, fullDescription: event.target.value })} rows={5} className="w-full rounded-xl border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" /></FormField></div><FormField label="GitHub URL" htmlFor={`project-github-${project.id}`}><Input id={`project-github-${project.id}`} value={project.github || ''} onChange={(event) => update(index, { ...project, github: event.target.value })} /></FormField></div><StringListEditor label="Технологии" values={project.tech || []} onChange={(tech) => update(index, { ...project, tech })} /><StringListEditor label="Ключевые возможности" values={project.features || []} onChange={(features) => update(index, { ...project, features })} /><div className="space-y-3"><StringListEditor label="Изображения проекта" values={project.screenshots || []} onChange={(screenshots) => update(index, { ...project, screenshots })} placeholder="URL изображения" />{media.length > 0 && <select defaultValue="" onChange={(event) => { const url = event.target.value; if (url && !project.screenshots?.includes(url)) update(index, { ...project, screenshots: [...(project.screenshots || []), url] }); event.target.value = '' }} className="h-10 w-full rounded-xl border border-input bg-background px-3 text-sm"><option value="" disabled>Добавить из медиатеки…</option>{media.map((image) => <option key={image.id} value={image.url}>{image.alt || image.url}</option>)}</select>}</div></RepeatableCard>)}{values.length === 0 && <Card><CardContent className="p-8 pt-8 text-center text-sm text-muted-foreground sm:p-8 sm:pt-8">Добавьте первый проект, чтобы он появился на сайте и в предпросмотре.</CardContent></Card>}</div>
+}
+
+function AppearanceEditor({ value, onChange }: { value: SettingsData; onChange: (value: SettingsData) => void }) {
+  return <Card><CardHeader><CardTitle>Оформление</CardTitle><CardDescription>Базовая тема портфолио. Детальная палитра появится вместе со схемой site adapter.</CardDescription></CardHeader><CardContent><FormField label="Тема сайта" htmlFor="portfolio-theme"><select id="portfolio-theme" value={value.theme} onChange={(event) => onChange({ ...value, theme: event.target.value as 'dark' | 'light' })} className="h-10 w-full rounded-xl border border-input bg-background px-3 text-sm"><option value="dark">Тёмная</option><option value="light">Светлая</option></select></FormField></CardContent></Card>
+}
+
+function SectionHeading({ title, action }: { title: string; action: () => void }) {
+  return <div className="flex items-center justify-between gap-4"><h2 className="text-lg font-semibold tracking-[-0.02em]">{title}</h2><Button type="button" variant="outline" size="sm" onClick={action}><Plus className="mr-2 h-4 w-4" />Добавить</Button></div>
 }

@@ -13,8 +13,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Admin Panel",
-  description: "Universal Admin Panel for Project Management",
+  title: "Ammatias · Панель сайтов",
+  description: "Управление сайтами и их содержимым",
+  icons: {
+    icon: "/brand/ammatias-dragon.png",
+    apple: "/brand/ammatias-dragon.png",
+  },
 };
 
 export default function RootLayout({
@@ -24,10 +28,11 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+      lang="ru"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col bg-background">{children}</body>
+      <body className="min-h-full bg-background text-foreground">{children}</body>
     </html>
   );
 }
