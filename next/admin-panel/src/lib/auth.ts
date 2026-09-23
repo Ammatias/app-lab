@@ -27,7 +27,7 @@ export const authOptions: NextAuthOptions = {
       }
       return session
     },
-    async signIn({ user, account }) {
+    async signIn({ account }) {
       if (account?.provider === 'authentik') {
         return true
       }

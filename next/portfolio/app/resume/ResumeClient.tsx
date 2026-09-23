@@ -6,9 +6,10 @@ import { generatePDF } from "@/lib/generate-pdf";
 import { generateDOCX } from "@/lib/generate-docx";
 import { ParallaxText } from "@/components/ui/ParallaxText";
 import { FadeInSlide } from "@/components/ui/FadeInSlide";
+import type { Resume } from "@/data/resume";
 
 interface ResumeClientProps {
-  resume: any;
+  resume: Resume;
 }
 
 export default function ResumeClient({ resume }: ResumeClientProps) {
@@ -69,7 +70,7 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
             <section className="mb-12">
               <h2 className="text-2xl font-semibold mb-6">Опыт работы</h2>
               <div className="space-y-6">
-                {resume.experience && resume.experience.map((job: any) => (
+                {resume.experience.map((job) => (
                   <div key={job.id} className="border-l-2 border-primary pl-6">
                     <h3 className="text-xl font-semibold">{job.position}</h3>
                     <p className="text-muted-foreground">{job.company}</p>
@@ -92,7 +93,7 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
             <section className="mb-12">
               <h2 className="text-2xl font-semibold mb-6">Образование</h2>
               <div className="space-y-4">
-                {resume.education && resume.education.map((edu: any) => (
+                {resume.education.map((edu) => (
                   <div key={edu.id} className="border-l-2 border-primary pl-6">
                     <h3 className="text-xl font-semibold">{edu.degree}</h3>
                     <p className="text-muted-foreground">{edu.institution}</p>
@@ -114,7 +115,7 @@ export default function ResumeClient({ resume }: ResumeClientProps) {
               <section className="mb-12">
                 <h2 className="text-2xl font-semibold mb-6">Повышение квалификации, курсы</h2>
                 <div className="space-y-4">
-                  {resume.courses.map((course: any) => (
+                  {resume.courses.map((course) => (
                     <div key={course.id} className="border-l-2 border-primary pl-6">
                       <h3 className="text-xl font-semibold">{course.title}</h3>
                       <p className="text-muted-foreground">{course.institution}</p>

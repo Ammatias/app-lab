@@ -1,8 +1,3 @@
-import { Download, Mail, Github, Send } from "lucide-react";
-import { generatePDF } from "@/lib/generate-pdf";
-import { generateDOCX } from "@/lib/generate-docx";
-import { ParallaxText } from "@/components/ui/ParallaxText";
-import { FadeInSlide } from "@/components/ui/FadeInSlide";
 import { getAllContent } from "@/lib/api-client";
 import ResumeClient from "./ResumeClient";
 

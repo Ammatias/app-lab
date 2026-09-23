@@ -6,7 +6,6 @@ import {
   HeadingLevel,
   AlignmentType,
   BorderStyle,
-  UnderlineType,
 } from "docx";
 import { saveAs } from "file-saver";
 import type { Resume } from "@/data/resume";

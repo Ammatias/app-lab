@@ -1,11 +1,11 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth/next'
 import { authOptions } from '@/lib/auth'
 import { db } from '@/lib/db'
 import fs from 'fs/promises'
 import path from 'path'
 
-export async function POST(request: NextRequest) {
+export async function POST() {
   try {
     // 1. Check authorization
     const session = await getServerSession(authOptions)
@@ -96,10 +96,11 @@ main()
     await fs.writeFile(seedPath, seedContent, 'utf-8')
 
     return NextResponse.json({ message: 'Backup successfully written to seed.js' })
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Failed to export seed:', error)
+    const message = error instanceof Error ? error.message : 'Unknown error'
     return NextResponse.json(
-      { message: 'Failed to export database state', error: error.message },
+      { message: 'Failed to export database state', error: message },
       { status: 500 }
     )
   }
