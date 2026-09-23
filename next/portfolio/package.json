@@ -1,5 +1,5 @@
 {
-  "name": "web",
+  "name": "portfolio",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -7,10 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "docker:build": "docker compose -f docker/docker-compose.yml build",
-    "docker:up": "docker compose -f docker/docker-compose.yml up -d",
-    "docker:down": "docker compose -f docker/docker-compose.yml down",
-    "docker:logs": "docker compose -f docker/docker-compose.yml logs -f"
+    "docker:build": "docker compose -f docker/compose.yaml build",
+    "docker:up": "docker compose -f docker/compose.yaml up -d",
+    "docker:down": "docker compose -f docker/compose.yaml down",
+    "docker:logs": "docker compose -f docker/compose.yaml logs -f"
   },
   "dependencies": {
     "@react-pdf/renderer": "^4.3.2",

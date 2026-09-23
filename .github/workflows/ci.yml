@@ -18,7 +18,7 @@ jobs:
       matrix:
         application:
           - next/portfolio
-          - next/admin_panel
+          - next/admin-panel
     defaults:
       run:
         working-directory: ${{ matrix.application }}

@@ -17,7 +17,7 @@ fi
 
 # Остановка Admin Panel
 echo "Stopping Admin Panel..."
-cd "$(dirname "$0")/admin_panel/docker"
+cd "$(dirname "$0")/admin-panel/docker"
 $COMPOSE_CMD down
 
 # Остановка Portfolio

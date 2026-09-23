@@ -38,7 +38,7 @@ echo -e "${GREEN}✅ Network 'backend' ready${NC}"
 echo -e "${GREEN}✅ Network 'frontend' ready${NC}"
 
 # Переход в директорию Admin Panel
-cd "$(dirname "$0")/admin_panel/docker"
+cd "$(dirname "$0")/admin-panel/docker"
 
 # Применение миграций Admin Panel
 echo -e "${YELLOW}🗄 Running Admin Panel migrations...${NC}"
@@ -77,7 +77,7 @@ echo ""
 echo "=== Admin Panel ==="
 docker compose ps
 echo ""
-cd ../../admin_panel/docker
+cd ../../admin-panel/docker
 $COMPOSE_CMD ps
 echo ""
 echo "=== Portfolio ==="
@@ -93,10 +93,10 @@ echo "   Admin Panel:  https://admin.web.example.com"
 echo "   Portfolio:    https://portfolio.web.example.com"
 echo ""
 echo "📊 View logs:"
-echo "   Admin Panel:  cd admin_panel/docker && docker compose logs -f"
+echo "   Admin Panel:  cd admin-panel/docker && docker compose logs -f"
 echo "   Portfolio:    cd portfolio/docker && docker compose logs -f"
 echo ""
 echo "🛑 Stop services:"
-echo "   Admin Panel:  cd admin_panel/docker && docker compose down"
+echo "   Admin Panel:  cd admin-panel/docker && docker compose down"
 echo "   Portfolio:    cd portfolio/docker && docker compose down"
 echo ""

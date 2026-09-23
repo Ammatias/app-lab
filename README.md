@@ -9,10 +9,10 @@ The repository contains publishable project snapshots rather than private deploy
 ```text
 next/
 ├── portfolio/    # public portfolio website
-└── admin_panel/  # content administration panel
+└── admin-panel/  # content administration panel
 ```
 
-Both current applications use Next.js and TypeScript. The administration panel uses PostgreSQL and Prisma. Project-specific setup and validation instructions are in [`next/README.md`](next/README.md).
+Both current applications use Next.js and TypeScript. The administration panel uses PostgreSQL and Prisma. Start with the project-specific instructions in [`next/portfolio/README.md`](next/portfolio/README.md) and [`next/admin-panel/README.md`](next/admin-panel/README.md); [`next/README.md`](next/README.md) is the project index.
 
 ## Privacy boundary
 
@@ -24,6 +24,8 @@ This is a public repository. It must not contain:
 - private deployment artifacts or operational documentation.
 
 Published examples use reserved domains, neutral demonstration content, and explicit placeholders. Private working sources must be sanitized before they are copied here.
+
+The public `Ammatias` pseudonym and its project logo are intentional branding. Legal names, private contact details, production infrastructure, and other identifying operational data remain outside this repository.
 
 ## Validation
 

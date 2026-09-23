@@ -55,7 +55,7 @@ prisma/migrations/*/migration_lock.toml
 /documentation-backup-*.tar.gz
 *.disabled
 
-/admin_panel/$null
+/admin-panel/$null
 # OS
 Thumbs.db
 # Never publish local environment files

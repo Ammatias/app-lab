@@ -1,24 +1,21 @@
-# App Lab portfolio stack
+# Next.js projects
 
 Public template for a portfolio website and its content administration panel.
 The repository contains example profile data and placeholder configuration only.
 
 ## Applications
 
-- `portfolio` — public Next.js website.
-- `admin_panel` — Next.js administration panel backed by PostgreSQL and Prisma.
+- [`portfolio`](portfolio/README.md) — public Next.js website.
+- [`admin-panel`](admin-panel/README.md) — Next.js administration panel backed by PostgreSQL and Prisma.
 
 ## Local setup
 
-1. Install dependencies with `npm ci` in each application directory.
-2. Copy the relevant `.env.example` files to `.env`.
-3. Replace every `change-me`, `replace-with-*`, `example.com`, and
-   `your-username` placeholder before deployment.
-4. Run `npm run build` to validate each application.
+1. Open the README for the application you want to run.
+2. Copy its `.env.example` to `.env`.
+3. Replace every placeholder before deployment.
+4. Run `npm ci`, `npm run lint`, and `npm run build` in that application directory.
 
-Docker Compose definitions are stored under each application's `docker`
-directory. They intentionally reference environment variables and do not embed
-credentials.
+Docker Compose examples are stored as `docker/compose.yaml`. They intentionally reference environment variables and do not embed credentials. The live infrastructure is managed through Dockhand; these files are application deployment examples, not production state.
 
 ## Security
 
