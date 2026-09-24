@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
-import { Prisma } from '@prisma/client'
 import { z } from 'zod'
 
 interface Props {
@@ -40,10 +39,6 @@ const updateResumeSchema = z.object({
   }).optional(),
 })
 
-function asJsonObject(value: Prisma.JsonValue): Prisma.JsonObject {
-  return value && typeof value === 'object' && !Array.isArray(value) ? value : {}
-}
-
 /**
  * GET /api/resume/[slug]
  * 
@@ -68,8 +63,8 @@ export async function GET(request: NextRequest, { params }: Props) {
       )
     }
 
-    const content = asJsonObject(project.content)
-    const resume = content.resume ?? null
+    const content = project.content as any
+    const resume = content?.resume || null
 
     return NextResponse.json({
       data: resume,
@@ -108,7 +103,7 @@ export async function PUT(request: NextRequest, { params }: Props) {
       )
     }
 
-    const content = asJsonObject(project.content)
+    const content = (project.content as any) || {}
     const updatedContent = {
       ...content,
       resume: validation,

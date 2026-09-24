@@ -1,5 +1,5 @@
 {
-  "name": "portfolio",
+  "name": "web",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -7,10 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "docker:build": "docker compose -f docker/compose.yaml build",
-    "docker:up": "docker compose -f docker/compose.yaml up -d",
-    "docker:down": "docker compose -f docker/compose.yaml down",
-    "docker:logs": "docker compose -f docker/compose.yaml logs -f"
+    "docker:build": "docker compose -f docker/docker-compose.yml build",
+    "docker:up": "docker compose -f docker/docker-compose.yml up -d",
+    "docker:down": "docker compose -f docker/docker-compose.yml down",
+    "docker:logs": "docker compose -f docker/docker-compose.yml logs -f"
   },
   "dependencies": {
     "@react-pdf/renderer": "^4.3.2",
@@ -22,7 +22,7 @@
     "file-saver": "^2.0.5",
     "framer-motion": "^12.38.0",
     "lucide-react": "^0.577.0",
-    "next": "16.3.6",
+    "next": "16.2.1",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "tailwind-merge": "^3.5.0",
@@ -36,7 +36,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.3.6",
+    "eslint-config-next": "16.2.1",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

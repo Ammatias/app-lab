@@ -1,5 +1,5 @@
 {
-  "name": "admin-panel",
+  "name": "admin_panel",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -11,18 +11,18 @@
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
     "db:migrate:deploy": "prisma migrate deploy",
-    "docker:build": "docker compose -f docker/compose.yaml build",
-    "docker:up": "docker compose -f docker/compose.yaml up -d",
-    "docker:down": "docker compose -f docker/compose.yaml down",
-    "docker:logs": "docker compose -f docker/compose.yaml logs -f",
-    "docker:migrate": "docker compose -f docker/compose.yaml --profile migrate up prisma-migrate"
+    "docker:build": "docker compose -f docker/docker-compose.yml build",
+    "docker:up": "docker compose -f docker/docker-compose.yml up -d",
+    "docker:down": "docker compose -f docker/docker-compose.yml down",
+    "docker:logs": "docker compose -f docker/docker-compose.yml logs -f",
+    "docker:migrate": "docker compose -f docker/docker-compose.yml --profile migrate up prisma-migrate"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
     "@radix-ui/react-slot": "^1.2.4",
     "clsx": "^2.1.1",
     "lucide-react": "^1.7.0",
-    "next": "16.3.6",
+    "next": "16.2.1",
     "next-auth": "^4.24.13",
     "react": "19.2.4",
     "react-dom": "19.2.4",
@@ -35,7 +35,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.3.6",
+    "eslint-config-next": "16.2.1",
     "prisma": "^5.22.0",
     "tailwindcss": "^4",
     "typescript": "^5"
