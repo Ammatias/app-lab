@@ -142,14 +142,19 @@ export function AnimatedBackground() {
   const animationEnabled = useAnimatedBackgroundEnabled();
   return (
     <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden" aria-hidden="true">
-      {animationEnabled && (
-        <Canvas camera={{ position: [0, 0, 7.4], fov: 62 }} dpr={[1, 1.25]} gl={{ antialias: false, alpha: true, powerPreference: "low-power" }}>
-          <NetworkMap />
-        </Canvas>
-      )}
-      <motion.div animate={animationEnabled ? { scale: [1, 1.12, 1], opacity: [0.1, 0.18, 0.1] } : undefined} transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }} className="absolute left-[12%] top-[16%] h-72 w-72 rounded-full bg-purple-500/15 blur-3xl sm:h-96 sm:w-96" />
-      <motion.div animate={animationEnabled ? { scale: [1.1, 1, 1.1], opacity: [0.1, 0.2, 0.1] } : undefined} transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 1 }} className="absolute bottom-[10%] right-[8%] h-72 w-72 rounded-full bg-violet-500/15 blur-3xl sm:h-96 sm:w-96" />
+      <div className="absolute inset-0" style={{ opacity: "var(--network-scene-opacity)" }}>
+        {animationEnabled && (
+          <Canvas camera={{ position: [0, 0, 7.4], fov: 62 }} dpr={[1, 1.25]} gl={{ antialias: false, alpha: true, powerPreference: "low-power" }}>
+            <NetworkMap />
+          </Canvas>
+        )}
+      </div>
+      <div className="absolute inset-0" style={{ opacity: "var(--network-glow-opacity)" }}>
+        <motion.div animate={animationEnabled ? { scale: [1, 1.12, 1], opacity: [0.1, 0.18, 0.1] } : undefined} transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }} className="absolute left-[12%] top-[16%] h-72 w-72 rounded-full bg-purple-500/15 blur-3xl sm:h-96 sm:w-96" />
+        <motion.div animate={animationEnabled ? { scale: [1.1, 1, 1.1], opacity: [0.1, 0.2, 0.1] } : undefined} transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 1 }} className="absolute bottom-[10%] right-[8%] h-72 w-72 rounded-full bg-violet-500/15 blur-3xl sm:h-96 sm:w-96" />
+      </div>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0,transparent_42%,var(--background)_100%)]" />
+      <div className="absolute inset-0" style={{ background: "var(--network-contrast-veil)" }} />
     </div>
   );
 }

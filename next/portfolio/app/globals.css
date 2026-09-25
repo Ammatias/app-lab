@@ -12,6 +12,9 @@
   --accent: #27272a;
   --card: #18181b;
   --card-foreground: #ededed;
+  --network-scene-opacity: 0.4;
+  --network-glow-opacity: 0.5;
+  --network-contrast-veil: rgba(10, 10, 10, 0.2);
 }
 
 /* Светлая тема */
@@ -26,6 +29,9 @@
   --accent: #f4f4f5;
   --card: #fafafa;
   --card-foreground: #0a0a0a;
+  --network-scene-opacity: 0.82;
+  --network-glow-opacity: 0.88;
+  --network-contrast-veil: rgba(255, 255, 255, 0.02);
 }
 
 @theme inline {
