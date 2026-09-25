@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import type { Prisma } from '@prisma/client'
 import { db } from '@/lib/db'
 import { z } from 'zod'
 
@@ -63,8 +64,8 @@ export async function GET(request: NextRequest, { params }: Props) {
       )
     }
 
-    const content = project.content as any
-    const resume = content?.resume || null
+    const content = project.content as Prisma.JsonObject
+    const resume = content.resume || null
 
     return NextResponse.json({
       data: resume,
@@ -103,11 +104,11 @@ export async function PUT(request: NextRequest, { params }: Props) {
       )
     }
 
-    const content = (project.content as any) || {}
+    const content = (project.content as Prisma.JsonObject) || {}
     const updatedContent = {
       ...content,
       resume: validation,
-    }
+    } as Prisma.InputJsonObject
 
     await db.project.update({
       where: { slug },
