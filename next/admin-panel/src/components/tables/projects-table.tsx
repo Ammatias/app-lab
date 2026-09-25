@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react'
 import Link from 'next/link'
-import { AlertCircle, ExternalLink, FileText, Globe2, Pencil, Plus, Search } from 'lucide-react'
+import { AlertCircle, BriefcaseBusiness, ExternalLink, FileText, Globe2, Pencil, Plus, Search } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { EmptyState } from '@/components/ui/empty-state'
@@ -89,7 +89,7 @@ export function ProjectsTable({ projects, loadError = false }: { projects: Site[
                 {filteredSites.map((site) => (
                   <TableRow key={site.id}>
                     <TableCell className="pl-5">
-                      <div className="flex items-center gap-3"><span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-muted text-primary"><Globe2 className="h-5 w-5" aria-hidden="true" /></span><div className="min-w-0"><div className="flex items-center gap-2"><p className="truncate font-semibold">{site.name}</p><span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">{site.siteType === 'portfolio' ? 'Портфолио' : 'Универсальный'}</span></div><p className="truncate font-mono text-xs text-muted-foreground">{site.url}</p></div></div>
+                      <div className="flex items-center gap-3"><span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-muted text-primary">{site.siteType === 'portfolio' ? <BriefcaseBusiness className="h-5 w-5" aria-hidden="true" /> : <Globe2 className="h-5 w-5" aria-hidden="true" />}</span><div className="min-w-0"><div className="flex items-center gap-2"><p className="truncate font-semibold">{site.name}</p><span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">{site.siteType === 'portfolio' ? 'Портфолио' : 'Универсальный'}</span></div><p className="truncate font-mono text-xs text-muted-foreground">{site.url}</p></div></div>
                     </TableCell>
                     <TableCell><StatusBadge status={site.status} /></TableCell>
                     <TableCell><p className="text-sm">{site._count.pages} стр. · {site._count.images} медиа</p><p className="mt-0.5 text-xs text-muted-foreground">{site._count.builds} сборок</p></TableCell>
@@ -110,7 +110,7 @@ export function ProjectsTable({ projects, loadError = false }: { projects: Site[
           <div className="grid gap-3 md:hidden">
             {filteredSites.map((site) => (
               <article key={site.id} className="rounded-2xl border bg-card p-4">
-                <div className="flex items-start gap-3"><span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-muted text-primary"><Globe2 className="h-5 w-5" aria-hidden="true" /></span><div className="min-w-0 flex-1"><h2 className="truncate font-semibold">{site.name}</h2><p className="mt-1 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">{site.siteType === 'portfolio' ? 'Портфолио' : 'Универсальный'}</p><p className="truncate font-mono text-xs text-muted-foreground">{site.url}</p></div><StatusBadge status={site.status} /></div>
+                <div className="flex items-start gap-3"><span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-muted text-primary">{site.siteType === 'portfolio' ? <BriefcaseBusiness className="h-5 w-5" aria-hidden="true" /> : <Globe2 className="h-5 w-5" aria-hidden="true" />}</span><div className="min-w-0 flex-1"><h2 className="truncate font-semibold">{site.name}</h2><p className="mt-1 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">{site.siteType === 'portfolio' ? 'Портфолио' : 'Универсальный'}</p><p className="truncate font-mono text-xs text-muted-foreground">{site.url}</p></div><StatusBadge status={site.status} /></div>
                 {site.description && <p className="mt-4 line-clamp-2 text-sm leading-6 text-muted-foreground">{site.description}</p>}
                 <div className="mt-4 flex items-center justify-between border-t pt-4"><p className="text-xs text-muted-foreground">Изменён {formatDate(site.updatedAt)}</p><div className="flex gap-1"><Button variant="ghost" size="icon" asChild><Link href={site.url} target="_blank" rel="noopener noreferrer" aria-label={`Открыть сайт ${site.name}`}><ExternalLink className="h-4 w-4" aria-hidden="true" /></Link></Button><Button variant="outline" size="sm" asChild><Link href={`/projects/${site.id}`}>Управлять</Link></Button></div></div>
               </article>

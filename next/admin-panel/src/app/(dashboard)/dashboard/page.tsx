@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { AlertCircle, ArrowRight, FileText, GitBranch, Globe2, Image as ImageIcon, Plus } from 'lucide-react'
+import { AlertCircle, ArrowRight, BriefcaseBusiness, FileText, GitBranch, Globe2, Image as ImageIcon, Plus } from 'lucide-react'
 import { db } from '@/lib/db'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -117,7 +117,7 @@ export default async function DashboardPage() {
               return (
               <Card key={site.id}>
                 <CardContent className="flex flex-col gap-4 pt-5 sm:flex-row sm:items-center sm:pt-6">
-                  <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-primary/10 text-primary"><Globe2 className="h-6 w-6" aria-hidden="true" /></span>
+                  <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-primary/10 text-primary">{site.siteType === 'portfolio' ? <BriefcaseBusiness className="h-6 w-6" aria-hidden="true" /> : <Globe2 className="h-6 w-6" aria-hidden="true" />}</span>
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2"><h3 className="truncate font-semibold">{site.name}</h3><StatusBadge status={site.status} /></div>
                     <p className="mt-1 truncate font-mono text-xs text-muted-foreground">{site.url}</p>

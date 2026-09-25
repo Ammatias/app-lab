@@ -15,16 +15,20 @@ const DATA_SOURCE = process.env.DATA_SOURCE || 'static';
 const PROJECT_SLUG = 'portfolio';
 
 async function getStaticContent() {
-  const [projects, resume, hero] = await Promise.all([
+  const [projects, resume, hero, homeProfile, workContext] = await Promise.all([
     import('@/data/projects').then((module) => module.projects),
     import('@/data/resume').then((module) => module.resume),
     import('@/data/hero').then((module) => module.hero),
+    import('@/data/home-profile').then((module) => module.homeProfile),
+    import('@/data/work-context').then((module) => module.workContext),
   ]);
 
   return {
     projects,
     resume,
     hero,
+    homeProfile,
+    workContext,
     settings: { theme: 'dark' as const, colors: {} },
   };
 }
@@ -130,6 +134,10 @@ export async function getAllContent() {
       }
 
       const json = await res.json();
+      const [{ homeProfile }, { workContext }] = await Promise.all([
+        import('@/data/home-profile'),
+        import('@/data/work-context'),
+      ]);
       return {
         projects: json.data?.projects || [],
         resume: json.data?.resume || null,
@@ -139,6 +147,8 @@ export async function getAllContent() {
           ctaPrimary: { text: 'Projects', href: '#projects' },
           ctaSecondary: { text: 'Resume', href: '/resume' },
         },
+        homeProfile: json.data?.homeProfile || homeProfile,
+        workContext: json.data?.workContext || workContext,
         settings: json.settings || { theme: 'dark', colors: {} },
       };
     } catch (error) {

@@ -2,6 +2,8 @@ export interface Project {
   id: string;
   title: string;
   description: string;
+  role?: string;
+  result?: string;
   fullDescription?: string;
   tech: string[];
   features?: string[];
@@ -12,12 +14,19 @@ export interface Project {
 
 export const projects: Project[] = [
   {
-    id: "1",
-    title: "Демонстрационный проект",
-    description: "Пример проекта на Next.js для замены собственным содержимым.",
-    fullDescription: "Обновите описание, ссылки и изображения перед публикацией своего портфолио.",
-    tech: ["Next.js", "TypeScript", "Tailwind CSS", "PostgreSQL"],
-    features: ["Адаптивный интерфейс", "Управление контентом", "Docker-развёртывание"],
+    id: "demo-project",
+    title: "Демонстрационная веб-платформа",
+    description: "Пример full-stack проекта с управляемым контентом и контейнерным развёртыванием.",
+    role: "Архитектура · Full-stack разработка",
+    result: "Единое адаптивное приложение с понятной структурой данных и процессом публикации.",
+    fullDescription: "Замените этот демонстрационный кейс собственным проектом, описав задачу, роль, результат и ключевые технические решения.",
+    tech: ["Next.js", "TypeScript", "Tailwind CSS", "PostgreSQL", "Docker"],
+    features: [
+      "Адаптивный интерфейс",
+      "Управляемый контент",
+      "Типизированный API",
+      "Контейнерное развёртывание",
+    ],
     github: "https://github.com/your-username/your-repository",
     demo: "https://portfolio.example.com",
     screenshots: [],

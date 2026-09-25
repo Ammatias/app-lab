@@ -28,7 +28,7 @@ export default function LoginPage() {
       <section className="relative w-full max-w-md rounded-3xl border bg-card p-6 shadow-[0_24px_80px_rgba(24,32,43,0.12)] sm:p-8">
         <div className="flex items-center gap-3">
           <BrandMark size="lg" priority />
-          <div><p className="font-semibold">Ammatias</p><p className="text-xs text-muted-foreground">панель сайтов</p></div>
+          <div><p className="font-semibold">Site Control</p><p className="text-xs text-muted-foreground">панель сайтов</p></div>
         </div>
 
         <div className="mt-10">

@@ -14,6 +14,8 @@ const portfolioProjectSchema = z.object({
   id: z.string(),
   title: z.string(),
   description: z.string(),
+  role: z.string().optional(),
+  result: z.string().optional(),
   fullDescription: z.string().optional(),
   tech: z.array(z.string()),
   features: z.array(z.string()).optional(),
@@ -24,6 +26,15 @@ const portfolioProjectSchema = z.object({
 
 export const portfolioContentSchema = z.object({
   hero: z.object({ title: z.string(), subtitle: z.string(), ctaPrimary: actionSchema, ctaSecondary: actionSchema }).strict(),
+  homeProfile: z.object({ about: z.string(), competencies: z.array(z.string()) }).strict(),
+  workContext: z.object({
+    title: z.string(),
+    status: z.string(),
+    focusLabel: z.string(),
+    featuredProjectId: z.string(),
+    note: z.string(),
+    layers: z.array(z.object({ id: z.string(), label: z.string(), value: z.string() }).strict()),
+  }).strict(),
   resume: z.object({
     about: z.string(),
     skills: z.array(z.string()),
@@ -68,6 +79,8 @@ export const siteTypeSchema = z.enum(['portfolio', 'generic'])
 export const portfolioDefaults = {
   content: {
     hero: { title: '', subtitle: '', ctaPrimary: { text: '', href: '' }, ctaSecondary: { text: '', href: '' } },
+    homeProfile: { about: '', competencies: [] },
+    workContext: { title: 'Рабочий контур', status: 'online', focusLabel: 'Сейчас в фокусе', featuredProjectId: '', note: '', layers: [] },
     resume: { about: '', skills: [], experience: [], education: [], courses: [], contacts: { email: '', github: '', telegram: '', phone: '' } },
     projects: [],
   },

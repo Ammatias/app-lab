@@ -33,7 +33,7 @@ function SidebarContent({ sites, onNavigate }: { sites: SidebarSite[]; onNavigat
         >
           <BrandMark />
           <span>
-            <span className="block text-sm font-semibold leading-none">Ammatias</span>
+            <span className="block text-sm font-semibold leading-none">Site Control</span>
             <span className="mt-1 block text-[11px] text-slate-400">панель сайтов</span>
           </span>
         </Link>

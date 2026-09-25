@@ -13,12 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Ammatias · Панель сайтов",
+  title: "Site Control · Панель сайтов",
   description: "Управление сайтами и их содержимым",
-  icons: {
-    icon: "/brand/ammatias-dragon.png",
-    apple: "/brand/ammatias-dragon.png",
-  },
 };
 
 export default function RootLayout({

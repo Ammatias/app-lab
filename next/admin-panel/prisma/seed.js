@@ -13,41 +13,54 @@ async function main() {
 
   const content = {
     hero: {
-      title: 'Привет, я Разработчик',
-      subtitle: 'Создаю современные веб-приложения с фокусом на производительность и удобство.',
+      title: 'Создаю понятные веб-системы от интерфейса до инфраструктуры',
+      subtitle: 'Демонстрационный профиль full-stack разработчика. Замените тексты, проекты и контакты собственными данными.',
       ctaPrimary: { href: '#projects', text: 'Посмотреть проекты' },
-      ctaSecondary: { href: '/resume', text: 'Резюме' },
+      ctaSecondary: { href: '/resume', text: 'Открыть резюме' },
+    },
+    homeProfile: {
+      about: 'Демонстрационный профиль разработчика, который объединяет интерфейсы, API, данные и инфраструктуру.',
+      competencies: ['Full-stack разработка', 'Next.js и TypeScript', 'Проектирование API', 'Docker и контейнеризация'],
+    },
+    workContext: {
+      title: 'Рабочий контур',
+      status: 'online',
+      focusLabel: 'Сейчас в фокусе',
+      featuredProjectId: 'demo-project',
+      note: 'Демонстрационный контур показывает связь интерфейса, данных и эксплуатации.',
+      layers: [
+        { id: 'interface', label: 'Интерфейс', value: 'Next.js · TypeScript' },
+        { id: 'system', label: 'Система', value: 'API · PostgreSQL · Docker' },
+        { id: 'operations', label: 'Эксплуатация', value: 'Сборка · мониторинг · поддержка' },
+      ],
     },
     resume: {
       about: 'Демонстрационный профиль разработчика. Замените его собственным содержимым.',
       skills: ['TypeScript', 'Next.js', 'Node.js', 'PostgreSQL', 'Docker'],
-      courses: [{ id: '1', year: '2024', title: 'Современная веб-разработка', institution: 'Пример учебного центра' }],
-      contacts: {
-        email: 'developer@example.com',
-        phone: '+0 000 000 00 00',
-        github: 'https://github.com/your-username/',
-        telegram: '@your-telegram',
-      },
-      education: [{ id: '1', year: '2024', degree: 'Высшее образование', specialty: 'Информационные технологии', institution: 'Пример университета' }],
-      experience: [{ id: '1', period: '2024 — настоящее время', company: 'Пример компании', position: 'Веб-разработчик', description: ['Разработка и сопровождение веб-приложений'] }],
+      courses: [{ id: 'demo-course', year: '2024', title: 'Современная веб-разработка', institution: 'Пример учебного центра' }],
+      contacts: { email: 'developer@example.com', phone: '+0 000 000 00 00', github: 'https://github.com/your-username/', telegram: '@your-telegram' },
+      education: [{ id: 'demo-education', year: '2024', degree: 'Профессиональное образование', specialty: 'Информационные технологии', institution: 'Пример учебного заведения' }],
+      experience: [{ id: 'demo-experience', period: '2024 — настоящее время', company: 'Пример компании', position: 'Full-stack разработчик', description: ['Разработка и сопровождение веб-приложений'] }],
     },
     projects: [{
-      id: '1',
+      id: 'demo-project',
       demo: 'https://portfolio.example.com',
-      tech: ['Next.js', 'TypeScript', 'Tailwind CSS', 'PostgreSQL'],
-      title: 'Демонстрационный проект',
+      role: 'Архитектура · Full-stack разработка',
+      result: 'Адаптивное приложение с управляемым контентом и контейнерным развёртыванием.',
+      tech: ['Next.js', 'TypeScript', 'Tailwind CSS', 'PostgreSQL', 'Docker'],
+      title: 'Демонстрационная веб-платформа',
       github: 'https://github.com/your-username/your-repository',
-      features: ['Адаптивный интерфейс', 'Управление контентом', 'Docker-развёртывание'],
-      description: 'Пример проекта для замены собственным содержимым.',
+      features: ['Адаптивный интерфейс', 'Управляемый контент', 'Типизированный API'],
+      description: 'Пример full-stack проекта для замены собственным содержимым.',
       screenshots: [],
-      fullDescription: 'Обновите описание и ссылки перед публикацией своего портфолио.',
+      fullDescription: 'Обновите задачу, роль, результат и ссылки перед публикацией своего портфолио.',
     }],
   }
 
   const portfolioProject = await db.project.upsert({
     where: { slug: 'portfolio' },
-    update: { name: 'Portfolio', url: 'https://portfolio.example.com', userId: 'system', content, settings: { theme: 'dark', colors: {} } },
-    create: { id: 'example-portfolio-project', name: 'Portfolio', slug: 'portfolio', url: 'https://portfolio.example.com', userId: 'system', content, settings: { theme: 'dark', colors: {} } },
+    update: { name: 'Portfolio', url: 'https://portfolio.example.com', siteType: 'portfolio', userId: 'system', content, settings: { theme: 'dark', colors: {} } },
+    create: { id: 'example-portfolio-project', name: 'Portfolio', slug: 'portfolio', url: 'https://portfolio.example.com', siteType: 'portfolio', userId: 'system', content, settings: { theme: 'dark', colors: {} } },
   })
 
   console.log('System user ensured:', systemUser.id)

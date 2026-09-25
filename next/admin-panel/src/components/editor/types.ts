@@ -5,6 +5,20 @@ export interface HeroData {
   ctaSecondary: { text: string; href: string }
 }
 
+export interface HomeProfileData {
+  about: string
+  competencies: string[]
+}
+
+export interface WorkContextData {
+  title: string
+  status: string
+  focusLabel: string
+  featuredProjectId: string
+  note: string
+  layers: Array<{ id: string; label: string; value: string }>
+}
+
 export interface Experience {
   id: string
   position: string
@@ -49,6 +63,8 @@ export interface PortfolioProjectData {
   id: string
   title: string
   description: string
+  role?: string
+  result?: string
   fullDescription?: string
   tech: string[]
   features?: string[]
@@ -59,6 +75,8 @@ export interface PortfolioProjectData {
 
 export interface ContentData {
   hero: HeroData
+  homeProfile: HomeProfileData
+  workContext: WorkContextData
   resume: ResumeData
   projects: PortfolioProjectData[]
 }

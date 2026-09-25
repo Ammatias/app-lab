@@ -1,0 +1,10 @@
+.next
+node_modules
+.git
+.env
+.env.*
+!.env.example
+AI
+*.log
+*.tar
+*.tar.gz

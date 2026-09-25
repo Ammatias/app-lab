@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { ExternalLink, FileText, Gauge, GitBranch, Globe2, Images, Settings } from 'lucide-react'
+import { BriefcaseBusiness, ExternalLink, FileText, Gauge, GitBranch, Globe2, Images, Settings } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { StatusBadge } from '@/components/ui/status-badge'
 import { cn } from '@/lib/utils'
@@ -24,6 +24,7 @@ export function SiteWorkspace({
 }) {
   const pathname = usePathname()
   const basePath = `/projects/${site.id}`
+  const SiteIcon = site.siteType === 'portfolio' ? BriefcaseBusiness : Globe2
 
   return (
     <div className="space-y-6">
@@ -38,7 +39,7 @@ export function SiteWorkspace({
           <span className="absolute inset-y-0 left-0 w-1 bg-primary" aria-hidden="true" />
           <div className="flex min-w-0 items-center gap-3 pl-2">
             <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-accent text-accent-foreground">
-              <Globe2 className="h-5 w-5" aria-hidden="true" />
+              <SiteIcon className="h-5 w-5" aria-hidden="true" />
             </span>
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">

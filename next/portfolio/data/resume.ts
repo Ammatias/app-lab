@@ -32,12 +32,12 @@ export interface Resume {
 }
 
 export const resume: Resume = {
-  about: "Разработчик программного обеспечения. Замените этот демонстрационный текст своей информацией.",
+  about: "Демонстрационный профиль разработчика. Замените этот текст собственной профессиональной информацией.",
   skills: ["TypeScript", "Next.js", "Node.js", "PostgreSQL", "Docker"],
   experience: [
     {
-      id: "1",
-      position: "Веб-разработчик",
+      id: "demo-experience",
+      position: "Full-stack разработчик",
       company: "Пример компании",
       period: "2024 — настоящее время",
       description: [
@@ -48,16 +48,16 @@ export const resume: Resume = {
   ],
   education: [
     {
-      id: "1",
-      degree: "Высшее образование",
-      institution: "Пример университета",
+      id: "demo-education",
+      degree: "Профессиональное образование",
+      institution: "Пример учебного заведения",
       year: "2024",
       specialty: "Информационные технологии",
     },
   ],
   courses: [
     {
-      id: "1",
+      id: "demo-course",
       year: "2024",
       title: "Современная веб-разработка",
       institution: "Пример учебного центра",
