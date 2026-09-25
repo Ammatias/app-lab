@@ -21,7 +21,7 @@ export function ExportSeedButton() {
       const response = await fetch('/api/admin/export-seed', { method: 'POST' })
       const data = await response.json() as { message?: string }
       if (!response.ok) throw new Error(data.message || 'Не удалось создать резервную копию.')
-      setNotification({ type: 'success', message: 'Содержимое сохранено в seed.js.' })
+      setNotification({ type: 'success', message: data.message || 'Содержимое сохранено в seed.js.' })
     } catch (error: unknown) {
       console.error(error)
       setNotification({ type: 'error', message: error instanceof Error ? error.message : 'Не удалось создать резервную копию.' })

@@ -135,7 +135,9 @@ export default async function DashboardPage() {
       <Card>
         <CardHeader><CardTitle>Резервная копия содержимого</CardTitle></CardHeader>
         <CardContent className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <p className="max-w-2xl text-sm leading-6 text-muted-foreground">Сохранить текущее состояние сайтов и контента в серверный seed-файл.</p>
+          <p className="max-w-2xl text-sm leading-6 text-muted-foreground">
+            Сохранить все сайты, контент, страницы, метаданные медиатеки и историю сборок в серверный seed-файл. Сами файлы из uploads копируются отдельно.
+          </p>
           <ExportSeedButton />
         </CardContent>
       </Card>
