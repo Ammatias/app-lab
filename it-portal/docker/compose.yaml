@@ -1,0 +1,47 @@
+name: it-portal
+
+services:
+  api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.backend
+    image: it-portal-api:demo
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp:size=16m,mode=1777
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "--silent", "http://127.0.0.1:8000/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    networks:
+      - portal
+
+  frontend:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.frontend
+    image: it-portal-frontend:demo
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "${IT_PORTAL_PORT:-3010}:8080"
+    read_only: true
+    tmpfs:
+      - /var/cache/nginx:size=16m,mode=0755
+      - /var/run:size=1m,mode=0755
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - portal
+
+networks:
+  portal:
+    driver: bridge
+

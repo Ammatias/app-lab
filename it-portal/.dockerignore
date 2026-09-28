@@ -1,0 +1,10 @@
+.git
+.gitignore
+Guides
+**/node_modules
+**/dist
+**/target
+**/.env*
+!**/.env.example
+**/*.log
+

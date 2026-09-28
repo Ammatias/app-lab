@@ -6,8 +6,12 @@ interface ProjectCoverProps {
 }
 
 export function ProjectCover({ project, index }: ProjectCoverProps) {
-  const isAdmin = project.title.toLocaleLowerCase("ru").includes("администратор");
-  const labels = isAdmin ? ["Сайты", "Контент", "Медиа", "Публикация"] : ["Интерфейс", "CMS", "Резюме", "Проекты"];
+  const normalizedTitle = project.title.toLocaleLowerCase("ru");
+  const labels = normalizedTitle.includes("ит-портал")
+    ? ["Сервисы", "Устройства", "Справочник", "Заявки"]
+    : normalizedTitle.includes("администратор")
+      ? ["Сайты", "Контент", "Медиа", "Публикация"]
+      : ["Интерфейс", "CMS", "Резюме", "Проекты"];
 
   return (
     <div className="relative h-full overflow-hidden bg-[radial-gradient(circle_at_52%_46%,color-mix(in_srgb,var(--primary)_18%,transparent),transparent_38%),linear-gradient(145deg,var(--card),var(--background))] p-5 sm:p-7">

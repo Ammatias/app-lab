@@ -1,0 +1,17 @@
+FROM rust:1.90-bookworm AS builder
+WORKDIR /app
+COPY backend/Cargo.toml backend/Cargo.lock* ./
+COPY backend/src ./src
+RUN cargo build --release --locked
+
+FROM debian:bookworm-slim AS runner
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends ca-certificates curl \
+    && rm -rf /var/lib/apt/lists/* \
+    && useradd --system --uid 10001 --create-home portal
+COPY --from=builder /app/target/release/it_portal_backend /usr/local/bin/it-portal-api
+USER portal
+EXPOSE 8000
+ENV RUST_LOG=info
+CMD ["/usr/local/bin/it-portal-api"]
+
