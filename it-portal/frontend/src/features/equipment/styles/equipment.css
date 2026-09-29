@@ -1,0 +1,704 @@
+.equipment-page {
+  gap: 24px;
+}
+
+.equipment-section-title h3 {
+  margin: 0;
+}
+
+.equipment-section-title p {
+  margin: 8px 0 0;
+  color: rgba(255, 255, 255, 0.68);
+  line-height: 1.55;
+}
+
+.equipment-department-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.equipment-section-title {
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.equipment-department-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.equipment-record-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-flow: dense;
+  align-items: start;
+  gap: 14px;
+}
+
+.equipment-record-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 0;
+  padding: 16px;
+  border-radius: 20px;
+  background:
+    linear-gradient(180deg, rgba(34, 41, 56, 0.9), rgba(22, 26, 36, 0.9)),
+    rgba(255, 255, 255, 0.04) !important;
+}
+
+.equipment-record-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.equipment-record-header h3 {
+  margin: 4px 0 0;
+  font-size: 1.05rem;
+  line-height: 1.12;
+}
+
+.equipment-record-header p {
+  margin: 6px 0 0;
+  color: rgba(255, 255, 255, 0.64);
+  font-size: 0.86rem;
+  line-height: 1.35;
+}
+
+.equipment-record-eyebrow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  color: #d3dcff;
+  font-size: 0.74rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.equipment-inline-badge,
+.equipment-pill,
+.equipment-device-badge,
+.equipment-device-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  padding: 5px 9px;
+  font-size: 0.73rem;
+  font-weight: 700;
+}
+
+.equipment-inline-badge,
+.equipment-pill {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.equipment-pill--accent {
+  background: rgba(104, 174, 255, 0.18);
+  border-color: rgba(104, 174, 255, 0.2);
+  color: #d7e9ff;
+}
+
+.equipment-record-pills {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 6px;
+}
+
+.equipment-record-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 2px;
+}
+
+.equipment-stat-tile,
+.equipment-device-card,
+.equipment-empty-note {
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.equipment-record-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.equipment-stat-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px;
+  min-height: 0;
+}
+
+.equipment-stat-tile span {
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.equipment-stat-tile strong {
+  font-size: 0.88rem;
+  line-height: 1.25;
+}
+
+.equipment-stat-tile--wide {
+  grid-column: 1 / -1;
+}
+
+.equipment-device-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.equipment-device-badge {
+  background: rgba(115, 130, 255, 0.12);
+  border: 1px solid rgba(115, 130, 255, 0.2);
+  color: #dbe2ff;
+}
+
+.equipment-device-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.equipment-device-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 11px;
+}
+
+.equipment-device-topline {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.equipment-device-type {
+  color: #cfd9ff;
+  font-size: 0.69rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.equipment-device-chip {
+  padding: 3px 7px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.equipment-device-title {
+  font-size: 0.9rem;
+  line-height: 1.15;
+}
+
+.equipment-device-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: rgba(255, 255, 255, 0.64);
+  font-size: 0.76rem;
+  line-height: 1.25;
+}
+
+.equipment-device-meta--secondary {
+  margin-top: -2px;
+}
+
+.equipment-device-inline-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.equipment-device-inline-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  padding: 3px 8px;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.equipment-device-inline-pill--accent {
+  background: rgba(104, 174, 255, 0.14);
+  border: 1px solid rgba(104, 174, 255, 0.18);
+  color: #d7e9ff;
+}
+
+.equipment-device-inline-pill:not(.equipment-device-inline-pill--accent) {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.74);
+}
+
+.equipment-empty-note {
+  padding: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.35;
+  font-size: 0.8rem;
+}
+
+.equipment-toolbar-summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 10px 16px;
+}
+
+.equipment-toolbar-summary span {
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 0.82rem;
+}
+
+.equipment-toolbar-summary strong {
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.equipment-toolbar-cluster {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  min-width: min(100%, 420px);
+}
+
+.equipment-toolbar-tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.equipment-toolbar-tabs .password-tab-btn {
+  min-width: auto;
+  min-height: 38px;
+  padding: 8px 14px;
+  border-radius: 11px;
+}
+
+.equipment-ip-phone-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.equipment-ip-phone-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.equipment-ip-phone-card.is-compact {
+  padding: 10px;
+  gap: 8px;
+}
+
+.equipment-ip-phone-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.equipment-ip-phone-eyebrow {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.equipment-ip-phone-header strong {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.92rem;
+  line-height: 1.2;
+}
+
+.equipment-ip-phone-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.equipment-ip-phone-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 11px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.equipment-ip-phone-field--wide {
+  grid-column: 1 / -1;
+}
+
+.equipment-ip-phone-field span {
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.equipment-ip-phone-field strong {
+  font-size: 0.86rem;
+  line-height: 1.35;
+  word-break: break-word;
+}
+
+.equipment-modal {
+  max-height: calc(100vh - 40px);
+  overflow: hidden;
+}
+
+.equipment-modal-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  max-height: calc(100vh - 40px);
+}
+
+.equipment-modal-header,
+.equipment-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 22px 24px;
+}
+
+.equipment-modal-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.equipment-modal-footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  justify-content: flex-end;
+}
+
+.equipment-modal-header h2 {
+  margin: 6px 0 0;
+}
+
+.equipment-modal-eyebrow {
+  color: #d3dcff;
+  font-size: 0.74rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.equipment-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 22px 24px;
+  overflow: auto;
+}
+
+.equipment-modal-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.equipment-modal-section-title {
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.equipment-modal-section-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.equipment-modal-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.equipment-modal-grid--meta {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.equipment-modal-grid--device {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.equipment-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.equipment-field span {
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 0.82rem;
+}
+
+.equipment-field--wide {
+  grid-column: span 2;
+}
+
+.equipment-field-note {
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+.equipment-device-editor-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.equipment-device-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+}
+
+.equipment-device-editor-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.equipment-device-editor-header strong {
+  display: block;
+}
+
+.equipment-device-editor-header span {
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 0.82rem;
+}
+
+.equipment-device-editor-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.equipment-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.74);
+  font-size: 0.84rem;
+}
+
+.global-result-card--equipment .global-result-card-body {
+  justify-content: flex-start;
+}
+
+.global-equipment-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 0;
+}
+
+.global-equipment-panel {
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  padding: 14px 16px;
+}
+
+.global-equipment-panel--primary {
+  min-height: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.global-equipment-panel strong {
+  display: block;
+  margin-top: 4px;
+  font-size: 1rem;
+  line-height: 1.3;
+}
+
+.global-equipment-panel span {
+  color: rgba(255, 255, 255, 0.64);
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.global-equipment-panel.global-equipment-panel--primary > span:first-child {
+  line-height: 1.15;
+}
+
+.global-equipment-panel.global-equipment-panel--primary strong {
+  display: block;
+  width: 100%;
+  margin-top: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-break: normal;
+  line-height: 1.2;
+}
+
+.global-equipment-panel.global-equipment-panel--primary > span:last-child {
+  line-height: 1.2;
+}
+
+.global-equipment-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.global-equipment-meta .equipment-pill,
+.global-equipment-device-badges .equipment-device-badge {
+  padding: 7px 11px;
+}
+
+.global-equipment-stats {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.global-equipment-stats .equipment-stat-tile {
+  min-height: 100%;
+}
+
+.global-equipment-device-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.global-equipment-device-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.global-ip-phone-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 0;
+}
+
+.global-ip-phone-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(280px, 1.1fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.global-ip-phone-main {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.global-ip-phone-layout .equipment-ip-phone-grid {
+  min-width: 0;
+}
+
+@media (max-width: 1200px) {
+  .equipment-modal-grid--device {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .global-equipment-stats,
+  .global-equipment-device-list,
+  .global-ip-phone-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .equipment-record-card {
+    padding: 18px;
+  }
+
+  .equipment-record-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .equipment-device-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .equipment-ip-phone-list,
+  .equipment-ip-phone-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .equipment-record-header {
+    flex-direction: column;
+  }
+
+  .equipment-record-pills {
+    justify-content: flex-start;
+  }
+
+  .equipment-section-title,
+  .equipment-device-editor-header,
+  .equipment-modal-header,
+  .equipment-modal-footer,
+  .equipment-modal-section-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .equipment-modal-grid--meta,
+  .equipment-modal-grid--device {
+    grid-template-columns: 1fr;
+  }
+
+  .equipment-toolbar-cluster {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .equipment-field--wide {
+    grid-column: auto;
+  }
+
+  .global-result-card--equipment {
+    grid-column: auto;
+    grid-row: auto;
+  }
+
+  .global-equipment-device-list {
+    grid-template-columns: 1fr;
+  }
+}

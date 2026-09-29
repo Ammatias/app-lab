@@ -1,0 +1,76 @@
+.phonebook-table-wrap {
+  overflow-x: auto;
+}
+
+.phonebook-table {
+  min-width: 1080px;
+}
+
+.phonebook-table th {
+  letter-spacing: 0.035em;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.phonebook-table td {
+  line-height: 1.5;
+}
+
+.phonebook-table .editable-tag {
+  max-width: 100%;
+  white-space: normal;
+}
+
+.phonebook-table .phonebook-trmm-card {
+  padding: 2px 0;
+  gap: 7px;
+}
+
+.phonebook-table .phonebook-trmm-network-row {
+  justify-content: flex-start;
+  gap: 6px;
+}
+
+.phonebook-table .phonebook-trmm-network {
+  flex: 0 1 auto;
+}
+
+.phonebook-table .phonebook-trmm-ip {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.phonebook-table .phonebook-trmm-speed {
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  line-height: 1.4;
+}
+
+.phonebook-table .phonebook-connect-actions {
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.phonebook-table .phonebook-trmm-action {
+  min-height: 28px;
+  margin-top: 1px;
+}
+
+.phonebook-table td:nth-child(5),
+.phonebook-table td:nth-child(6),
+.phonebook-table td:nth-child(7) {
+  font-variant-numeric: tabular-nums;
+}
+
+.phonebook-table .phonebook-table-head th {
+  height: 48px;
+  vertical-align: middle;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: normal;
+  text-transform: none;
+  overflow-wrap: normal;
+  word-break: normal;
+  white-space: normal;
+}

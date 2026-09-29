@@ -1,0 +1,88 @@
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.portal-header {
+  display: grid;
+  gap: 18px;
+}
+
+.portal-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.portal-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.results-grid {
+  display: grid;
+  gap: 18px;
+  align-items: start;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+
+.modal-panel {
+  width: min(720px, calc(100vw - 32px));
+}
+
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 24px;
+  gap: 24px;
+}
+
+.portal-footer {
+  width: min(680px, 100%);
+  box-sizing: border-box;
+  align-self: center;
+  margin: 16px auto 0;
+  padding: 12px 0 8px;
+  text-align: center;
+  background: none;
+  border: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.portal-footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+}
+
+.portal-footer-line {
+  margin: 0;
+  font-size: 0.75rem;
+  line-height: 1.35;
+  color: rgba(203, 208, 225, 0.62);
+}
+
+.portal-footer-rights {
+  margin-top: 1px;
+  font-size: 0.7rem;
+  opacity: 0.72;
+}

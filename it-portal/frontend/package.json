@@ -1,28 +1,33 @@
 {
   "name": "it-portal-frontend",
   "private": true,
-  "version": "1.0.0",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --host 0.0.0.0",
-    "build": "vite build",
+    "dev": "vite",
     "lint": "eslint .",
-    "preview": "vite preview --host 0.0.0.0"
+    "build": "vite build",
+    "test:unit": "node --test src/features/inventory/lib/inventoryGrouping.test.js src/features/accountable-assets/lib/accountablePresentation.test.js src/features/tactical/lib/trmmStatus.test.js src/features/outdoor-audio/lib/outdoorAudioModel.test.js src/features/file-storage/lib/fileStorage.test.js src/features/file-storage/lib/fileStorageEditContract.test.js src/features/file-storage/lib/fileStoragePreview.test.js src/features/passwords/lib/employeeEmail.test.js src/features/ecp/lib/ecpDates.test.js src/features/employees/lib/employeeArchiveContract.test.js src/app/lib/portalNavResponsive.test.js",
+    "preview": "vite --port 4173 --host 0.0.0.0"
   },
   "dependencies": {
-    "@vitejs/plugin-react": "4.7.0",
-    "vite": "7.3.6",
-    "typescript": "5.9.2",
-    "lucide-react": "0.544.0",
-    "react": "19.1.1",
-    "react-dom": "19.1.1"
+    "d3-selection": "^3.0.0",
+    "d3-transition": "^3.0.1",
+    "d3-zoom": "^3.0.0",
+    "framer-motion": "^11.0.0",
+    "lucide-react": "^0.359.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-pdf": "10.4.1"
   },
   "devDependencies": {
-    "@eslint/js": "9.35.0",
-    "eslint": "9.35.0",
-    "eslint-plugin-react-hooks": "5.2.0",
-    "eslint-plugin-react-refresh": "0.4.20",
-    "globals": "16.4.0"
+    "@eslint/js": "^10.0.1",
+    "@vitejs/plugin-react": "^6.1.1",
+    "eslint": "^10.11.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.7",
+    "globals": "^16.4.0",
+    "svgo": "^4.0.1",
+    "vite": "^8.3.1"
   }
 }
-

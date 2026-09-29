@@ -1,0 +1,5 @@
+export const FAVORITES_GROUP_KEY = 'favorites'
+export const FAVORITES_GROUP_TITLE = 'Домашняя'
+export const HOME_FAVORITES_STORAGE_KEY = 'itportal.home-favorites.v1'
+export const HOME_FAVORITES_LAYOUT_STORAGE_KEY = 'itportal.home-favorites-layout.v1'
+export const HOME_LAYOUT_DENSITY_STORAGE_KEY = 'itportal.home-density.v1'

@@ -1,0 +1,137 @@
+import { memo } from 'react'
+import { HomeClassicView } from './HomeClassicView'
+import { HomeNeonView } from './HomeNeonView'
+
+const HomePageComponent = ({
+  homeViewMode,
+  filteredHomeGroupTitles,
+  classicHomeGroups,
+  filteredHomeGroups,
+  currentHomeGroup,
+  currentHomeLinks,
+  currentHomeWidgets,
+  currentHomeItems,
+  homeWidgetData,
+  CurrentHomeIcon,
+  isFavoritesGroup,
+  isHomeEditMode,
+  homeDensityMode,
+  homeDropTargetGroupKey,
+  homeDensityClass,
+  homeScaleClass,
+  showHomeEditor,
+  homeLinkFormMode,
+  homeLinkDraft,
+  homeGroupDraft,
+  homeGroupContextLabel,
+  homeWidgetContextLabel,
+  showHomeWidgetPicker,
+  creatingHomeWidget,
+  homeWidgetDraft,
+  draggedHomeItemId,
+  homeDropPreviewItemKey,
+  homeDropPreviewMode,
+  isFavoriteLink,
+  onSetActiveHomeGroup,
+  onToggleEditMode,
+  onSetHomeDensityMode,
+  onOpenFavoriteForm,
+  onOpenHomeLinkCreate,
+  onOpenHomeGroupCreate,
+  onOpenHomeWidgetCreate,
+  onOpenInlineLinkCreate,
+  onOpenInlineWidgetCreate,
+  onHomeEditorSubmit,
+  onHomeLinkDraftChange,
+  onHomeGroupDraftChange,
+  onResetHomeEditor,
+  onHomeWidgetDraftChange,
+  onCreateHomeWidget,
+  onCancelHomeWidgetCreate,
+  onUpdateHomeWidget,
+  onHomeItemDragStart,
+  onHomeItemDrag,
+  onHomeItemDragOver,
+  onHomeItemDrop,
+  onHomeItemDragEnd,
+  onHomeGroupDragOver,
+  onHomeGroupDragLeave,
+  onHomeGroupDrop,
+  onRemoveFavoriteLink,
+  onEditHomeLink,
+  onDeleteHomeLink,
+  onDeleteHomeWidget,
+  onToggleFavorite
+}) => {
+  if (homeViewMode === 'classic') {
+    return (
+      <HomeClassicView
+        filteredHomeGroupTitles={filteredHomeGroupTitles}
+        classicHomeGroups={classicHomeGroups}
+      />
+    )
+  }
+
+  return (
+    <HomeNeonView
+      filteredHomeGroups={filteredHomeGroups}
+      currentHomeGroup={currentHomeGroup}
+      currentHomeLinks={currentHomeLinks}
+      currentHomeWidgets={currentHomeWidgets}
+      currentHomeItems={currentHomeItems}
+      homeWidgetData={homeWidgetData}
+      CurrentHomeIcon={CurrentHomeIcon}
+      isFavoritesGroup={isFavoritesGroup}
+      isHomeEditMode={isHomeEditMode}
+      homeDensityMode={homeDensityMode}
+      homeDropTargetGroupKey={homeDropTargetGroupKey}
+      homeDensityClass={homeDensityClass}
+      homeScaleClass={homeScaleClass}
+      showHomeEditor={showHomeEditor}
+      homeLinkFormMode={homeLinkFormMode}
+      homeLinkDraft={homeLinkDraft}
+      homeGroupDraft={homeGroupDraft}
+      homeGroupContextLabel={homeGroupContextLabel}
+      homeWidgetContextLabel={homeWidgetContextLabel}
+      showHomeWidgetPicker={showHomeWidgetPicker}
+      creatingHomeWidget={creatingHomeWidget}
+      homeWidgetDraft={homeWidgetDraft}
+      draggedHomeItemId={draggedHomeItemId}
+      homeDropPreviewItemKey={homeDropPreviewItemKey}
+      homeDropPreviewMode={homeDropPreviewMode}
+      isFavoriteLink={isFavoriteLink}
+      onSetActiveHomeGroup={onSetActiveHomeGroup}
+      onToggleEditMode={onToggleEditMode}
+      onSetHomeDensityMode={onSetHomeDensityMode}
+      onOpenFavoriteForm={onOpenFavoriteForm}
+      onOpenHomeLinkCreate={onOpenHomeLinkCreate}
+      onOpenHomeGroupCreate={onOpenHomeGroupCreate}
+      onOpenHomeWidgetCreate={onOpenHomeWidgetCreate}
+      onOpenInlineLinkCreate={onOpenInlineLinkCreate}
+      onOpenInlineWidgetCreate={onOpenInlineWidgetCreate}
+      onHomeEditorSubmit={onHomeEditorSubmit}
+      onHomeLinkDraftChange={onHomeLinkDraftChange}
+      onHomeGroupDraftChange={onHomeGroupDraftChange}
+      onResetHomeEditor={onResetHomeEditor}
+      onHomeWidgetDraftChange={onHomeWidgetDraftChange}
+      onCreateHomeWidget={onCreateHomeWidget}
+      onCancelHomeWidgetCreate={onCancelHomeWidgetCreate}
+      onUpdateHomeWidget={onUpdateHomeWidget}
+      onHomeItemDragStart={onHomeItemDragStart}
+      onHomeItemDrag={onHomeItemDrag}
+      onHomeItemDragOver={onHomeItemDragOver}
+      onHomeItemDrop={onHomeItemDrop}
+      onHomeItemDragEnd={onHomeItemDragEnd}
+      onHomeGroupDragOver={onHomeGroupDragOver}
+      onHomeGroupDragLeave={onHomeGroupDragLeave}
+      onHomeGroupDrop={onHomeGroupDrop}
+      onRemoveFavoriteLink={onRemoveFavoriteLink}
+      onEditHomeLink={onEditHomeLink}
+      onDeleteHomeLink={onDeleteHomeLink}
+      onDeleteHomeWidget={onDeleteHomeWidget}
+      onToggleFavorite={onToggleFavorite}
+    />
+  )
+}
+
+export default memo(HomePageComponent)

@@ -1,0 +1,750 @@
+.file-storage-workspace {
+  padding: 0;
+  overflow: hidden;
+}
+
+.file-storage-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 10px 14px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.file-storage-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 44px;
+  padding: 0 16px;
+  color: var(--text-muted);
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  transition: color 160ms ease, border-color 160ms ease;
+}
+
+.file-storage-tab:hover,
+.file-storage-tab.is-active {
+  color: var(--text-main);
+}
+
+.file-storage-tab.is-active {
+  border-bottom-color: var(--accent);
+}
+
+.file-storage-tab span {
+  min-width: 24px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  color: var(--text-muted);
+  background: rgba(148, 163, 184, 0.12);
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+.file-storage-page-error,
+.file-storage-form-error {
+  color: #fecaca;
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(248, 113, 113, 0.28);
+  border-radius: 10px;
+}
+
+.file-storage-page-error {
+  margin: 16px 20px 0;
+  padding: 10px 12px;
+}
+
+.file-storage-block-list {
+  display: grid;
+}
+
+.file-storage-block {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(230px, 0.78fr) minmax(320px, 1.22fr);
+  gap: 28px;
+  padding: 24px;
+  border-bottom: 1px solid var(--border);
+  transition: background-color 160ms ease;
+}
+
+.file-storage-block:last-child {
+  border-bottom: 0;
+}
+
+.file-storage-block:hover {
+  background: rgba(148, 163, 184, 0.035);
+}
+
+.file-storage-block-copy {
+  min-width: 0;
+}
+
+.file-storage-block-title-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.file-storage-block-title-row svg {
+  flex: 0 0 auto;
+  margin-top: 2px;
+  color: var(--accent);
+}
+
+.file-storage-block h2 {
+  margin: 0;
+  font-size: 1.08rem;
+  line-height: 1.35;
+}
+
+.file-storage-block p {
+  margin: 10px 0 0 29px;
+  color: var(--text-muted);
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+
+.file-storage-block-meta {
+  display: block;
+  margin: 12px 0 0 29px;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+}
+
+.file-storage-block-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0 0 29px;
+}
+
+.file-storage-block-actions .btn {
+  min-width: 0;
+}
+
+.file-storage-edit,
+.file-storage-delete {
+  color: var(--text-muted);
+}
+
+.file-storage-edit:hover {
+  color: var(--text-main);
+}
+
+.file-storage-delete:hover {
+  color: #fca5a5;
+}
+
+.file-storage-files {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+}
+
+.file-storage-file-items {
+  display: grid;
+  gap: 8px;
+}
+
+.file-storage-files-toggle {
+  width: 100%;
+  justify-content: center;
+  color: var(--text-muted);
+  background: transparent;
+  border-style: dashed;
+}
+
+.file-storage-files-toggle:hover {
+  color: var(--text-main);
+  border-color: rgba(148, 163, 184, 0.3);
+}
+
+.file-storage-file {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 11px;
+  min-height: 54px;
+  padding: 8px 9px 8px 12px;
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.18);
+}
+
+.file-storage-file-icon {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  color: var(--accent);
+  background: rgba(59, 130, 246, 0.11);
+}
+
+.file-storage-file-copy {
+  display: grid;
+  min-width: 0;
+  gap: 3px;
+}
+
+.file-storage-file-copy strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.file-storage-file-copy span {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+}
+
+.file-storage-file-actions {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.file-storage-preview-overlay {
+  padding: 16px !important;
+}
+
+.file-storage-preview-modal {
+  width: min(1180px, calc(100vw - 32px));
+  height: min(880px, calc(100dvh - 32px));
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.file-storage-preview-shell {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  color: var(--text-main);
+  background: linear-gradient(180deg, rgba(22, 20, 36, 0.99), rgba(7, 12, 22, 0.99));
+}
+
+.file-storage-preview-shell:fullscreen {
+  width: 100vw;
+  height: 100dvh;
+}
+
+.file-storage-preview-header {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  min-height: 66px;
+  padding: 10px 12px 10px 16px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.17);
+  background: rgba(15, 23, 42, 0.58);
+}
+
+.file-storage-preview-icon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  color: var(--accent);
+  background: rgba(59, 130, 246, 0.12);
+}
+
+.file-storage-preview-title {
+  display: grid;
+  min-width: 0;
+  gap: 3px;
+}
+
+.file-storage-preview-title h2 {
+  margin: 0;
+  overflow: hidden;
+  font-size: 1rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.file-storage-preview-title span {
+  color: var(--text-muted);
+  font-size: 0.74rem;
+}
+
+.file-storage-preview-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.file-storage-preview-actions .btn {
+  min-width: 0;
+}
+
+.file-storage-preview-controls {
+  display: flex;
+  align-items: center;
+  height: 36px;
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 9px;
+  background: rgba(30, 41, 59, 0.58);
+}
+
+.file-storage-preview-controls .btn {
+  width: 35px;
+  height: 34px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.file-storage-preview-controls .btn + .btn,
+.file-storage-preview-controls output + .btn {
+  border-left: 1px solid rgba(148, 163, 184, 0.15);
+}
+
+.file-storage-preview-controls .btn:hover:not(:disabled) {
+  background: rgba(71, 85, 105, 0.58);
+}
+
+.file-storage-preview-controls .btn:focus-visible {
+  position: relative;
+  z-index: 2;
+  outline: 2px solid #60a5fa;
+  outline-offset: -2px;
+}
+
+.file-storage-preview-controls .btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.34;
+}
+
+.file-storage-preview-controls output {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 34px;
+  border-left: 1px solid rgba(148, 163, 184, 0.15);
+  color: var(--text-main);
+  font-size: 0.76rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+.file-storage-preview-controls .file-storage-preview-fit {
+  width: auto;
+  padding-inline: 9px;
+  gap: 5px;
+}
+
+.file-storage-preview-controls .file-storage-preview-fit.is-active {
+  color: #93c5fd;
+  background: rgba(59, 130, 246, 0.12);
+}
+
+.file-storage-preview-close {
+  width: 40px;
+  padding-inline: 0;
+}
+
+.file-storage-preview-body {
+  position: relative;
+  min-height: 0;
+  background: #111827;
+}
+
+.file-storage-preview-document {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 16px;
+  overflow: auto;
+  overscroll-behavior: contain;
+  background: #111827;
+}
+
+.file-storage-preview-document .react-pdf__Document {
+  display: grid;
+  justify-content: center;
+  gap: 16px;
+}
+
+.file-storage-preview-document .react-pdf__Page {
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 14px 38px rgba(0, 0, 0, 0.34);
+}
+
+.file-storage-preview-document canvas {
+  display: block;
+  max-width: 100%;
+  height: auto !important;
+}
+
+.file-storage-preview-document .react-pdf__Page__textContent,
+.file-storage-preview-document .textLayer {
+  cursor: text;
+  user-select: text;
+}
+
+.file-storage-preview-state {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 10px;
+  padding: 24px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.file-storage-preview-state strong {
+  color: var(--text-main);
+  font-size: 1rem;
+}
+
+.file-storage-preview-state span {
+  max-width: 520px;
+  line-height: 1.5;
+}
+
+.file-storage-preview-progress {
+  width: min(420px, calc(100vw - 64px));
+  height: 6px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.18);
+}
+
+.file-storage-preview-progress > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #7c3aed, #38bdf8);
+  transition: width 180ms ease-out;
+}
+
+.file-storage-preview-progress-copy {
+  font-variant-numeric: tabular-nums;
+}
+
+.file-storage-preview-progress-copy b {
+  color: var(--text-main);
+}
+
+.file-storage-preview-render-progress {
+  position: sticky;
+  z-index: 4;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: min(420px, calc(100% - 24px));
+  margin: 0 auto 12px;
+  padding: 8px 12px;
+  border: 1px solid rgba(96, 165, 250, 0.24);
+  border-radius: 9px;
+  color: var(--text-muted);
+  background: rgba(15, 23, 42, 0.94);
+  box-shadow: 0 8px 24px rgba(2, 6, 23, 0.28);
+  backdrop-filter: blur(10px);
+}
+
+.file-storage-preview-render-progress b {
+  color: var(--text-main);
+  font-variant-numeric: tabular-nums;
+}
+
+.file-storage-preview-error-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.file-storage-preview-error > svg {
+  color: #fca5a5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .file-storage-preview-progress > span {
+    transition: none;
+  }
+}
+
+.file-storage-create-modal {
+  width: min(680px, calc(100vw - 28px));
+  max-height: min(760px, calc(100vh - 36px));
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.file-storage-modal-heading {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.file-storage-modal-icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 11px;
+  color: var(--accent);
+  background: rgba(59, 130, 246, 0.12);
+}
+
+.file-storage-modal-heading h2 {
+  margin: 3px 0 0;
+  font-size: 1.35rem;
+}
+
+.file-storage-form-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.file-storage-field {
+  display: grid;
+  gap: 7px;
+}
+
+.file-storage-field > span {
+  color: var(--text-muted);
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.file-storage-field textarea {
+  resize: vertical;
+  min-height: 86px;
+}
+
+.file-storage-dropzone {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding: 24px;
+  border: 1px dashed rgba(148, 163, 184, 0.34);
+  border-radius: 12px;
+  color: var(--text-muted);
+  text-align: center;
+  transition: border-color 160ms ease, background-color 160ms ease, transform 160ms ease;
+}
+
+.file-storage-dropzone.is-active {
+  border-color: var(--accent);
+  background: rgba(59, 130, 246, 0.08);
+  transform: translateY(-1px);
+}
+
+.file-storage-dropzone strong {
+  color: var(--text-main);
+}
+
+.file-storage-dropzone span {
+  font-size: 0.8rem;
+}
+
+.file-storage-existing-files {
+  display: grid;
+  gap: 7px;
+}
+
+.file-storage-existing-files-label {
+  color: var(--text-muted);
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.file-storage-existing-file {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  padding: 9px 10px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.18);
+}
+
+.file-storage-existing-file-copy {
+  display: grid;
+  min-width: 0;
+  gap: 3px;
+}
+
+.file-storage-existing-file-copy strong,
+.file-storage-existing-file-copy span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.file-storage-existing-file-copy span {
+  color: var(--text-muted);
+  font-size: 0.76rem;
+}
+
+.file-storage-replacement-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.file-storage-replace-control {
+  cursor: pointer;
+}
+
+.file-storage-selected-files {
+  display: grid;
+  gap: 6px;
+}
+
+.file-storage-selected-file {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+  padding: 5px 6px 5px 11px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.13);
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.file-storage-selected-name {
+  overflow: hidden;
+  color: var(--text-main);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.file-storage-form-error {
+  padding: 10px 12px;
+}
+
+.file-storage-modal-actions {
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+@media (max-width: 820px) {
+  .file-storage-block {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+}
+
+@media (max-width: 560px) {
+  .file-storage-tabs {
+    padding-inline: 8px;
+  }
+
+  .file-storage-tab {
+    flex: 1;
+    justify-content: center;
+    padding-inline: 10px;
+  }
+
+  .file-storage-block {
+    padding: 19px 14px;
+  }
+
+  .file-storage-block-actions {
+    margin-left: 0;
+  }
+
+  .file-storage-block-actions .btn {
+    flex: 1 1 140px;
+    justify-content: center;
+  }
+
+  .file-storage-file {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .file-storage-file .btn {
+    justify-content: center;
+  }
+
+  .file-storage-file-actions {
+    grid-column: 1 / -1;
+  }
+
+  .file-storage-file-actions .btn {
+    flex: 1 1 0;
+  }
+
+  .file-storage-existing-file {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .file-storage-replacement-actions {
+    grid-column: 1 / -1;
+    justify-content: flex-end;
+  }
+
+  .file-storage-create-modal {
+    padding: 18px;
+  }
+}
+
+@media (max-width: 720px) {
+  .file-storage-preview-overlay {
+    padding: 0 !important;
+  }
+
+  .file-storage-preview-modal {
+    width: 100vw;
+    height: 100dvh;
+    border-radius: 0 !important;
+  }
+
+  .file-storage-preview-header {
+    grid-template-columns: minmax(0, 1fr) auto;
+    padding-left: 12px;
+  }
+
+  .file-storage-preview-icon {
+    display: none;
+  }
+
+  .file-storage-preview-actions .btn span {
+    display: none;
+  }
+
+  .file-storage-preview-controls .file-storage-preview-fit {
+    width: 35px;
+    padding-inline: 0;
+  }
+}
+
+@media (max-width: 520px) {
+  .file-storage-preview-header {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .file-storage-preview-actions {
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .file-storage-preview-fullscreen {
+    display: none;
+  }
+}
