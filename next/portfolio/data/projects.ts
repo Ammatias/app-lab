@@ -30,15 +30,8 @@ export const projects: Project[] = [
       "Полная адаптивность под все устройства",
     ],
     github: "https://github.com/Ammatias/app-lab/tree/main/next/portfolio",
-    demo: "https://portfolio.ammatias.ru",
-    screenshots: [
-      "https://admin.web.ammatias.ru/m/v3A9FOPxQqCpsBNNYS6WGw",
-      "https://admin.web.ammatias.ru/m/FvJ4QACJT2KmA6VWBH14mQ",
-      "https://admin.web.ammatias.ru/m/5_C6TJaqQNuCrQg0siw6gw",
-      "https://admin.web.ammatias.ru/m/gaC1FN1GTwm5B2aXZRBWqA",
-      "https://admin.web.ammatias.ru/m/hxXJUwhYRf6fq0fwqXiRXg",
-      "https://admin.web.ammatias.ru/m/VfaG23hQRjecoI7Wvpjs5Q",
-    ],
+    demo: "https://portfolio.example.com",
+    screenshots: [],
   },
   {
     id: "it-portal",
